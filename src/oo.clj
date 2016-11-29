@@ -1,0 +1,63 @@
+(ns oo)
+
+(defn class-name [instance]
+  (:class-symbol instance))
+
+(defn class-of [instance]
+  (eval (instance :class-symbol)))
+
+(defn apply-message-to [class instance message args]
+  (if-some [method (-> class :instance-methods message)]
+    (apply method instance args)
+    (instance message)))
+
+(defn make [class & args]
+  (let [seeded {:class-symbol (class :own-symbol)}]
+    (apply-message-to class seeded :init args)))
+
+(defn send-to [instance message & args]
+  (apply-message-to (class-of instance) instance message args))
+
+
+(def Anything
+  { :own-symbol 'Anything
+    :instance-methods
+
+    { :init identity
+      :class-name :class-symbol
+      :class
+      (fn [this]
+        (class-of this))}})
+
+
+
+
+(def Point
+  { :own-symbol 'Point
+    :superclass-symbol 'Anything
+    :instance-methods
+
+    { :init
+      (fn [this x y]
+        (assoc this :x x :y y))
+
+      :origin
+      (fn [this]
+        (make Point 0 0))
+
+      :shift
+      (fn [this +x +y]
+        (make Point (+ (this :x) +x)
+                    (+ (this :y) +y)))
+
+      :add
+      (fn [this point]
+        (send-to this :shift (point :x) (point :y)))}})
+
+
+
+
+; Target syntax:
+; (defclass Point
+;   add [this point]
+;     (send-to this :shift (point :x) (point :y)))
