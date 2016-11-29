@@ -18,6 +18,17 @@
 (defn send-to [instance message & args]
   (apply-message-to (class-of instance) instance message args))
 
+(defn class-symbol-above [class-symbol]
+  (:superclass-symbol (eval class-symbol)))
+
+(defn lineage [class-symbol]
+  (if (nil? class-symbol)
+    nil
+    (cons class-symbol (lineage (class-symbol-above class-symbol)))))
+
+
+
+
 
 (def Anything
   { :own-symbol 'Anything
@@ -53,6 +64,14 @@
       :add
       (fn [this point]
         (send-to this :shift (point :x) (point :y)))}})
+
+
+(def RedPoint
+  { :own-symbol 'RedPoint
+    :superclass-symbol 'Point
+    :instance-methods
+
+    {}})
 
 
 
