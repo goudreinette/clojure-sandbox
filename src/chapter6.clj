@@ -7,7 +7,7 @@
   (eval (instance :class-symbol)))
 
 (defn apply-message-to [class instance message args]
-  (if-some [method (-> class :instance-methods message)]
+  (if-some [method (-> class :own-symbol method-cache message)]
     (apply method instance args)
     (instance message)))
 
@@ -24,6 +24,16 @@
 (defn lineage [class-symbol]
   (when (some? class-symbol)
     (cons class-symbol (lineage (class-symbol-above class-symbol)))))
+
+
+(defn method-cache [class-symbol]
+  (->> class-symbol
+    (lineage)
+    (reverse)
+    (map eval)
+    (map :instance-methods)
+    (reduce merge)))
+
 
 (def Anything
   { :own-symbol 'Anything
@@ -65,7 +75,6 @@
   { :own-symbol 'RedPoint
     :superclass-symbol 'Point
     :instance-methods
-
     {}})
 
 
