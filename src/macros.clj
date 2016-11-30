@@ -11,9 +11,10 @@
 (defmacro unless [test & branches]
   `(if ~test ~@(reverse branches)))
 
-(defmacro defclass [class-name attrs & methods]
-  `{ :own-symbol '~class-name
-     :instance-methods
-     { :init
-       (fn [~'this]
-         ~'this)}})
+
+(defmacro defclass [class attributes & methods]
+  `(def ~class
+    { :own-symbol '~class
+      :attributes ~(vec (map keyword attributes))
+      :instance-methods
+        {}}))

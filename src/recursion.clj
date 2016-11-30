@@ -30,7 +30,7 @@
      (sum* (rest numbers) (+ acc (first numbers))))))
 
 
-(defn fold* [*combiner* seq acc]
+(defn fold [*combiner* seq acc]
   (if (empty? seq)
     acc
     (fold *combiner* (rest seq)
