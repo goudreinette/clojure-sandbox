@@ -26,11 +26,3 @@
 (-> (+ 1 2)
   (* 3)
   (+ 4))
-
-
-; Sequences of Maps
-(defn separate [predicate sequence]
-  ((juxt filter remove) predicate sequence))
-
-(let [[odds evens] (separate odd? (range 20))]
-  odds)
