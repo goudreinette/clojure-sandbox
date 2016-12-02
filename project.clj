@@ -2,6 +2,7 @@
   :description ""
   :dependencies
     [[org.clojure/clojure "1.8.0"]
+     [org.clojure/algo.monads "0.1.6"]
      [proto-repl "0.3.1"]]
   :main oo
   :target-path "target/%s"
