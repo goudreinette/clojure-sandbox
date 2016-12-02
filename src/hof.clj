@@ -36,16 +36,16 @@
              "1934356190"])
 
 
-(defn check-sum [sequence]
-  (->> sequence
-    (map vector (range 1 (+ 1 (count sequence))))
-    (map (partial apply *))
-    (apply +)))
+; (defn check-sum [sequence]
+;   (->> sequence
+;     (map vector (range 1 (+ 1 (count sequence))))
+;     (map (partial apply *))
+;     (apply +)))
 
 ; Exercise 8
 (defn reversed-digits [string]
    (map #(-> % str Integer.) (reverse string)))
-; 
+;
 ; (defn isbn? [isbn]
 ;   (-> isbn
 ;     (reversed-digits)
@@ -81,6 +81,13 @@
       (check-sum-upc)
       (rem 10)
       (= 0))))
+
+
+(defn check-sum [zip-sequence sequence]
+  (->> sequence
+    (map vector zip-sequence)
+    (map (partial apply *))
+    (apply +)))
 
 
 (def upc? (number-checker check-sum-upc 10))
