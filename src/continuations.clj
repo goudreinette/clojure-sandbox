@@ -62,7 +62,15 @@
     b))
 
 
-(for [a [1 2]
-      b [10 100]
-      c [-1 2]]
-  (* a b c))
+(for [a [1 2 3]
+      b (repeat a "hi!")]
+  [a b])
+
+; 10.12
+; Exercise 1
+(defn multiples [n]
+  (range (* n 2) 101 n))
+
+(for [n (range 1 100)
+      m (multiples n)]
+    m)
