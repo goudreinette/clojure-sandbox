@@ -34,3 +34,54 @@
 (def isbn's ["0131774115"
              "0977716614"
              "1934356190"])
+
+
+(defn check-sum [sequence]
+  (->> sequence
+    (map vector (range 1 (+ 1 (count sequence))))
+    (map (partial apply *))
+    (apply +)))
+
+; Exercise 8
+(defn reversed-digits [string]
+   (map #(-> % str Integer.) (reverse string)))
+; 
+; (defn isbn? [isbn]
+;   (-> isbn
+;     (reversed-digits)
+;     (check-sum)
+;     (rem 11)
+;     (= 0)))
+
+; Exercise 9
+(def upc-range (cycle [1 3]))
+(def upc's [])
+
+
+
+
+(defn check-sum-upc [sequence]
+  (->> sequence
+    (map vector upc-range)
+    (map #(apply * %))
+    (apply +)))
+;
+; (defn upc? [upc]
+;   (-> upc
+;     (reversed-digits)
+;     (check-sum-upc)
+;     (rem 10)
+;     (= 0)))
+
+; Exercise 10
+(defn number-checker [check-sum divisor]
+  (fn [sequence]
+    (-> sequence
+      (reversed-digits)
+      (check-sum-upc)
+      (rem 10)
+      (= 0))))
+
+
+(def upc? (number-checker check-sum-upc 10))
+(def isbn? (number-checker check-sum 11))
