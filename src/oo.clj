@@ -18,8 +18,24 @@
 (defn send-to [instance message & args]
   (apply-message-to (class-of instance) instance message args))
 
+(def MetaClass
+  { :own-symbol 'MetaClass
+    :instance-methods
+    { :new
+      (fn [class & args]
+        (let [seeded {:class-symbol (class :own-symbol)}]
+          (apply-message-to class seeded :init args)))}})
+
+(def MetaPoint
+  { :instance-methods
+    { :origin
+      (fn [this]
+        assoc)}})
+
+
 (def Point
   { :own-symbol 'Point
+    :class-symbol 'MetaPoint
     :instance-methods
 
     { :init
@@ -38,18 +54,3 @@
       :add
       (fn [this point]
         (send-to this :shift (point :x) (point :y)))}})
-
-(def Holder
-  { :own-symbol 'Holder
-    :instance-methods
-
-    { :init
-      (fn [this held]
-        (assoc this :held held))}})
-
-
-
-; Target syntax:
-; (defclass Point
-;   add [this point]
-;     (send-to this :shift (point :x) (point :y)))
