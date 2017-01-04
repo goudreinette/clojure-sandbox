@@ -52,3 +52,11 @@
     ([]             (xf))
     ([result]       (xf result))
     ([result input] (xf result (str prefix ":" input)))))
+
+; (reduce (transducer conj) [] (range 10)) =
+; (transduce transducer conj (range 10))
+(defn transduce'
+  ([xform f coll]
+   (transduce' xform f (f) coll))
+  ([xform f init coll]
+   (reduce (xform f) init coll)))
