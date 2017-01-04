@@ -1,5 +1,5 @@
 (ns printer
-  (:require [macros :refer [forever]]
+  (:require [macros :refer [forever each-val]]
             [clojure.core.async :refer [chan go >! <!]]
             [clojure.core.strint :refer [<<]]))
 
@@ -7,15 +7,13 @@
 (def messages (chan))
 
 (defn start-consumer []
-  (forever
-    (println "Received" (<! messages))))
+  (each-val message messages
+    (println message)))
 
 (defn start-processor []
-  (forever
-    (let [number  (<! numbers)
-          message (<< "message: ~{number}")]
-      (println (<< "Processing: ~{number}"))
-      (>! messages message))))
+  (each-val number numbers
+    (println     (<< "Processing: ~{number}"))
+    (>! messages (<< "message: ~{number}"))))
 
 (defn start-producer []
   (go

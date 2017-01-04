@@ -5,7 +5,6 @@
 (def events [:inc :dec
              :inc :inc])
 
-
 (defn transition [count event]
   (case event
     :inc (+ event 1)
