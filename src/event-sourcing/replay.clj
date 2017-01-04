@@ -5,6 +5,9 @@
 (def events [:inc :dec
              :inc :inc])
 
+; Is using multimethods a better idea here?
+; Who needs extensibility from the outside in a
+; proprietary product?
 (defn transition [count event]
   (case event
     :inc (+ event 1)

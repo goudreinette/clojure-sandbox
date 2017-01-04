@@ -1,5 +1,5 @@
 (ns printer
-  (:require [macros :refer [forever each-val]]
+  (:require [macros :refer :all]
             [clojure.core.async :refer [chan go >! <!]]
             [clojure.core.strint :refer [<<]]))
 
