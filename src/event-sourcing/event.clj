@@ -1,10 +1,15 @@
 (ns events)
 
 
-(defn event [type & attrs]
-  {:type        type
-   :attributes (apply hash-map attrs)
-   :date       (java.util.Date.)})
+
+(defmacro defevent
+  "Defines an event constructor of a unique type"
+  [type keys]
+  `(defn ~type [& values#]
+     {:type  ~(keyword type)
+      :date   (java.util.Date.)
+      :attrs  (select-keys (apply hash-map values#) ~(map keyword keys))}))
+
 
 
 (defmulti  process-event #(%2 :type))

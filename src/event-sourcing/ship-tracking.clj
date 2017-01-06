@@ -16,9 +16,11 @@
                state))
 
 
+
 (defrecord Cargo [name])
 (defrecord Ship  [name port])
 (defrecord Port  [name country])
+
 
 (def events [(event :arrival :ship "King Roy" :port "Los Angeles")])
 
@@ -26,6 +28,10 @@
              :ports [(->Port  "San Francisco" "US")
                      (->Port  "Los Angeles"   "US")
                      (->Port  "Vancouver"     "CANADA")]})
+                     
+
+
+
 
 (defn replay []
   (reduce process-event state events))
