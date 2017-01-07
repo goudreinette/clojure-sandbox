@@ -1,5 +1,5 @@
-(ns events)
-
+(ns events
+  (:require [clojure.edn :as edn]))
 
 (defn validate-attributes
   "Ensures that the event has only the specified attributes"
@@ -18,6 +18,11 @@
       :date   (java.util.Date.)
       :attrs  (validate-attributes '~keys values#)}))
 
+(defn restore
+  "Replays stored events from the filesystem"
+  []
+  (-> (slurp "data.edn")
+      (edn/read-string)))
 
 
 (defmulti  process-event #(%2 :type))
