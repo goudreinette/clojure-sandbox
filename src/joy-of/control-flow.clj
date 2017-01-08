@@ -41,3 +41,6 @@
     (add-watch (var ~name) :re-bind
      (fn [key# r# old# new#]
       (println old# "->" new#)))))
+
+; domain
+(defmacro domain [])
