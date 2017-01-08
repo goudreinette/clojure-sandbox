@@ -15,8 +15,7 @@
 
 
 (defmacro condf [v & forms]
-  (let [body (expand-clauses v forms)]
-    `(cond ~@body)))
+  `(cond ~@(expand-clauses v forms)))
 
 
 (condf 12
