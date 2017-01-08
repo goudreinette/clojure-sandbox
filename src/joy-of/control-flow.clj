@@ -1,4 +1,4 @@
-(ns joy-of)
+(ns control-flow)
 
 (defn insert-v [v [condition result]]
   (list
