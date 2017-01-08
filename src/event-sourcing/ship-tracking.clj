@@ -16,7 +16,6 @@
                state))
 
 
-
 (defrecord Cargo [name])
 (defrecord Ship  [name port])
 (defrecord Port  [name country])
@@ -28,9 +27,6 @@
              :ports [(->Port  "San Francisco" "US")
                      (->Port  "Los Angeles"   "US")
                      (->Port  "Vancouver"     "CANADA")]})
-                     
-
-
 
 
 (defn replay []

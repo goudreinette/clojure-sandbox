@@ -15,10 +15,6 @@
   (reduce transition start events))
 
 
-
-
+  
 (defn main- []
-  (reset! counter (replay 0 events)))
-
-
-
+ (reset! counter (replay 0 events)))
