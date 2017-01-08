@@ -4,7 +4,7 @@
 (defn insert-v [v [condition result]]
   (list
     (if (list? condition)
-      (cons (first condition) (cons v (rest condition)))
+      (list* (first condition) v (rest condition))
       condition)
     result))
 
@@ -42,5 +42,28 @@
      (fn [key# r# old# new#]
       (println old# "->" new#)))))
 
-; domain
-(defmacro domain [])
+; Anaphora
+(defmacro awhen [expr & body]
+  `(let [~'it ~expr]
+      (if ~'it
+        (do ~@body))))
+
+
+; Contract
+(defmacro contract [pre post]
+  {:pre  (fn [] (~@pre))
+   :post (fn [] (~@post))})
+
+(defmacro defcontract [name args & {:keys [pre post]}]
+  `(def ~name (contract pre post)))
+
+
+(defmacro with-contract [])
+
+(macroexpand
+  '(contract (> x 0) (= result (* x 2))))
+
+(macroexpand
+  '(defcontract doubler [x]
+    :pre  (> x 0)
+    :post (= result (* x 2))))
