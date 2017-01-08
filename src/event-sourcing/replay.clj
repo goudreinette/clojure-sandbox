@@ -6,6 +6,7 @@
              :inc :inc])
 
 
+
 (defn transition [count event]
   (case event
     :inc (+ event 1)
@@ -15,6 +16,6 @@
   (reduce transition start events))
 
 
-  
+
 (defn main- []
  (reset! counter (replay 0 events)))
