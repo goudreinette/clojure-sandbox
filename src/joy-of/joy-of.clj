@@ -2,7 +2,9 @@
 
 (defn insert-v [v [condition result]]
   (list
-    (cons (first condition) (cons v (rest condition)))
+    (if (list? condition)
+      (cons (first condition) (cons v (rest condition)))
+      condition)
     result))
 
 (defn expand-clauses [v body]
@@ -17,8 +19,8 @@
     `(cond ~@body)))
 
 
-
-(condf 5
-  (<= 10) "lower than 10"
-  (<= 5)  "lower than 5"
-  (<= 0)  "expired")
+(condf 12
+  (>= 10)  "default"
+  (>= 5)   "lower than 10"
+  (>= 0)   "lower than 5"
+  :else    "expired")
