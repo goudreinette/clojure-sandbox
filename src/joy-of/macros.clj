@@ -62,7 +62,12 @@
   (list* `fn (collect-bodies forms)))
 
 (defmacro defcontract [name & args]
-  `(def ~name (contract ~@args)))
+ `(def ~name (contract ~@args)))
 
 (defn with-contract [contract fn]
   (partial fn contract))
+
+(defmacro defn-with-contract [contract name & args]
+ `(def ~name
+    (with-contract ~contract
+      (fn ~name ~@args))))

@@ -12,6 +12,7 @@
 
 (defcontract doubler-contract [x]
   :require (> x 0)
-  :ensure  (= % (* x 2)))
+  :ensure  (= % (* x 3)))
 
-(def times2 (with-contract doubler-contract #(* 2 %)))
+(defn-with-contract doubler-contract times2 [x]
+  (* 2 x))
