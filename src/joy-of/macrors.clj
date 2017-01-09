@@ -1,4 +1,4 @@
-(ns control-flow)
+(ns macros)
 
 ; condf
 (defn insert-v [v [condition result]]
@@ -19,19 +19,11 @@
   `(cond ~@(expand-clauses v forms)))
 
 
-(condf 12
-  (>= 10)  "default"
-  (>= 5)   "lower than 10"
-  (>= 0)   "lower than 5"
-  :else    "expired")
-
-
 ; unless
 (defmacro unless [test & body]
   `(when (not ~test) ~@body))
 
-(unless false
-  (println "yep"))
+
 
 
 ; def-watched
@@ -48,22 +40,29 @@
       (if ~'it
         (do ~@body))))
 
+; wrap-def
+(defn wrap-def [macro]
+  (let [macroname (symbol (str "def" macro))]
+    (defmacro macroname [name & args]
+       `(def ~name (apply macro args)))))
+
+
 
 ; Contract
-(defmacro contract [pre post]
-  {:pre  (fn [] (~@pre))
-   :post (fn [] (~@post))})
+(defn build-contract [[args & {:keys [require ensure]}]]
+  (list (into '[f] args)
+        {:pre  [require]
+         :post [ensure]}
+        (list* 'f args)))
 
-(defmacro defcontract [name args & {:keys [pre post]}]
-  `(def ~name (contract pre post)))
+(defn collect-bodies [forms]
+  (map build-contract (partition 5 forms)))
 
+(defmacro contract [& forms]
+  (list* `fn (collect-bodies forms)))
 
-(defmacro with-contract [])
+(defmacro defcontract [name & args]
+  `(def ~name (contract ~@args)))
 
-(macroexpand
-  '(contract (> x 0) (= result (* x 2))))
-
-(macroexpand
-  '(defcontract doubler [x]
-    :pre  (> x 0)
-    :post (= result (* x 2))))
+(defn with-contract [contract fn]
+  (partial fn contract))
