@@ -28,19 +28,27 @@
   (filter (partial neighbor? node) (nodes grid)))
 
 (defn unvisited? [visited neighbor]
-  (not (.contains visited neighbor)))
+  (not (contains? (set visited) neighbor)))
 
 ; go-loop
 ; loop (recur) with closure
 ;
 (defn flood-fill [grid start]
   (loop [visited   #{start}
-         frontier  (neighbors grid start)]
+         frontier  (list start)]
     (when-some [current (first frontier)]
       (let [unvisited-neighbors (filter #(unvisited? visited %) (neighbors grid current))]
         (recur
           (conj visited current)
           (concat unvisited-neighbors (rest frontier)))))))
 
-(defn a* [grid start goal]
-  "TODO")
+(defn find-in-grid [grid start goal]
+  (loop [came-from []
+         frontier  (list start)]
+    (when-some [current (first frontier)]
+      (if (= current goal)
+        (conj came-from current)
+        (let [unvisited-neighbors (filter #(unvisited? came-from %) (neighbors grid current))]
+          (recur
+            (conj came-from current)
+            (concat unvisited-neighbors (rest frontier))))))))
