@@ -7,13 +7,14 @@
 (def messages (chan))
 
 (defn start-consumer []
-  (forever [message (<! messages)]
-    (println message)))
+  (go-forever
+    (println (<! messages))))
 
 (defn start-processor []
-  (forever [number (<! numbers)]
-    (println     (<< "Processing: ~{number}"))
-    (>! messages (<< "message: ~{number}"))))
+  (go-forever
+    (let [number (<! numbers)]
+      (println     (<< "Processing: ~{number}"))
+      (>! messages (<< "message: ~{number}")))))
 
 (defn start-producer []
   (go

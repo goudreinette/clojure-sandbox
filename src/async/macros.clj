@@ -1,5 +1,5 @@
 (ns async.macros
-  (:require [clojure.core.async :refer [chan go <!]]))
+  (:require [clojure.core.async :refer [chan go-loop <! >! close! timeout]]))
 
-(defmacro forever [bindings & body]
-  `(go-loop [~@bindings] ~@body (recur)))
+(defmacro go-forever [& body]
+  `(go-loop [] ~@body (recur)))
