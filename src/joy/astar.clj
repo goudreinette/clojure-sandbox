@@ -37,11 +37,10 @@
   (loop [visited   #{start}
          frontier  (neighbors grid start)]
     (when-some [current (first frontier)]
-      (println current)
       (let [unvisited-neighbors (filter #(unvisited? visited %) (neighbors grid current))]
         (recur
           (conj visited current)
           (concat unvisited-neighbors (rest frontier)))))))
 
-(defn find-in-grid [grid start goal]
-  nil)
+(defn a* [grid start goal]
+  "TODO")

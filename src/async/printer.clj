@@ -7,11 +7,11 @@
 (def messages (chan))
 
 (defn start-consumer []
-  (for-chan message messages
+  (forever [message (<! messages)]
     (println message)))
 
 (defn start-processor []
-  (for-chan number numbers
+  (forever [number (<! numbers)]
     (println     (<< "Processing: ~{number}"))
     (>! messages (<< "message: ~{number}"))))
 
