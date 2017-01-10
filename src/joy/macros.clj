@@ -1,4 +1,4 @@
-(ns macros)
+(ns joy.macros)
 
 ; condf
 (defn insert-v [v [condition result]]
