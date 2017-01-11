@@ -57,12 +57,19 @@
 (defmacro defcontract [name args pre => post]
   `(def ~name (contract ~args ~pre ~'=> ~post)))
 
-(defmacro defn-contract [contract name args & body]
+(defmacro defconstrained [contract name args & body]
   `(def ~name (~contract (fn [~@args] ~@body))))
 
 ; Schema
-(defmacro defschema [name & attrs]
-  `(def ~name ~(apply hash-map attrs)))
+(defn field-name [keyword]
+  (symbol (name keyword)))
+
+(defmacro defschema [name & fields]
+  (let [schema-map    (apply hash-map fields)
+        schema-name   (symbol (str name "Schema"))
+        record-fields (map field-name (take-nth 2 fields))]
+    `(do (def ~schema-name ~schema-map)
+         (defrecord ~name [~@record-fields]))))
 
 (defn entry-valid? [schema [k v]]
   (= (type v)
