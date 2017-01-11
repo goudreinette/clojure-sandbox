@@ -59,3 +59,18 @@
 
 (defmacro defn-contract [contract name args & body]
   `(def ~name (~contract (fn [~@args] ~@body))))
+
+; Schema
+(defmacro defschema [name & attrs]
+  `(def ~name ~(apply hash-map attrs)))
+
+(defn valid? [schema [k v]]
+  (= (type v)
+     (schema k)))
+
+(defn validate [schema data]
+  (every? #(valid? schema %) data))
+
+(defschema User
+  :name String
+  :age  Long)
