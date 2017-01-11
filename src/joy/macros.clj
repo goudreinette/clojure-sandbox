@@ -77,3 +77,8 @@
 
 (defn valid? [schema data]
   (every? #(entry-valid? schema %) data))
+
+; Runtime Type Annotations
+(defmacro deftyped [name :: annotation params & body]
+ `(defn ~name [~@params]
+    ("TODO")))
