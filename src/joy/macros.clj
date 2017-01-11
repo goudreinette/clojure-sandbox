@@ -54,23 +54,8 @@
     (fn [~@args] {:pre [~pre] :post [~post]}
       (~'f ~@args))))
 
-
-
 (defmacro defcontract [name args pre => post]
   `(def ~name (contract ~args ~pre ~'=> ~post)))
 
-    ; (fn [~'f]
-    ;  (fn [~@args] {:pre [~pre] :post [~post]}
-    ;    (~'f ~@args)))))
-
-;
-; (defmacro defn-with-contract [name params & body]
-;  `(defn ~name [~@params]
-;     (~@body)))
-;
-
-
-(defcontract tripler [x]
-  (> x 0) => (= % (* 3 x)))
-
-(def triple (tripler #(* 2 %)))
+(defmacro defn-contract [contract name args & body]
+  `(def ~name (~contract (fn [~@args] ~@body))))

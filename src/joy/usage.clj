@@ -1,5 +1,5 @@
-(ns usage
-  (:use macros))
+(ns joy.usage
+  (:use joy.macros))
 
 (condf 12
   (>= 10)  "default"
@@ -8,11 +8,11 @@
   :else    "expired")
 
 (unless false
-  (println "yep"))
+  (println "yep")
 
-(defcontract doubler-contract [x]
-  :require (> x 0)
-  :ensure  (= % (* x 3)))
 
-(defn-with-contract doubler-contract times2 [x]
-  (* 2 x))
+(defcontract tripler [x]
+  (> x 0) => (= % (* 3 x)))
+
+(defn-contract tripler times3 [x]
+  (* x 2))
