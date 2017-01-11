@@ -10,9 +10,12 @@
 (unless false
   (println "yep"))
 
-
 (defcontract tripler [x]
   (number? x) => (= % (* 3 x)))
 
 (defn-contract tripler times3 [x]
   (* x 3))
+
+(defschema User
+  :name String
+  :age  Long)
