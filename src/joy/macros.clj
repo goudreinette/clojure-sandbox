@@ -49,25 +49,35 @@
 
 
 ; Contract
-(defn build-contract [[args & {:keys [require ensure]}]]
-  (list (into '[f] args)
-        {:pre  [require]
-         :post [ensure]}
-        (list* 'f args)))
 
-(defn collect-bodies [forms]
-  (map build-contract (partition 5 forms)))
+;
+; (defn build-contract [[args & {:keys [require ensure]}]]
+;   (list (into '[f] args)
+;         {:pre  [require]
+;          :post [ensure]}
+;         (list* 'f args)))
 
-(defmacro contract [& forms]
-  (list* `fn (collect-bodies forms)))
+; (defn collect-bodies [forms]
+;   (map build-contract (partition 5 forms)))
 
-(defmacro defcontract [name & args]
- `(def ~name (contract ~@args)))
+(defmacro defcontract [name args pre => post]
+  `(defn ~name [~'f]
+     (fn [~@args] {:pre [~pre] :post [~post]}
+      (~'f ~@args))))
 
-(defn with-contract [contract fn]
-  (partial fn contract))
+; (defmacro defcontract [name & args]
+;  `(def ~name (contract ~@args)))
+;
+; (defn with-contract [contract fn]
+;   (partial fn contract))
+;
+; (defmacro defn-with-contract [contract name & args]
+;  `(def ~name
+;     (with-contract ~contract
+;       (fn ~name ~@args))))
+(macroexpand-1
+  '(defcontract doubler [x]
+    (> x 0) => (= % (* 2 x))))
 
-(defmacro defn-with-contract [contract name & args]
- `(def ~name
-    (with-contract ~contract
-      (fn ~name ~@args))))
+(defcontract doubler [x]
+  (> x 0) => (= % (* 2 x)))
