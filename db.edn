@@ -1,1 +1,8 @@
-{:lieuwe :depieuwe}
+#{{:type :assert,
+   :attributes {:color :red},
+   :where nil,
+   :date #inst "2017-01-12T21:23:36.295-00:00"}
+  {:type :assert,
+   :where nil
+   :attributes {:color :yellow},
+   :date #inst "2017-01-12T20:53:44.659-00:00"}}
