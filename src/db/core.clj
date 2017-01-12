@@ -1,7 +1,7 @@
 (ns db.core
+  (:use [db.set])
   (:require [clojure.core.match :refer [match]]
-            [clojure.pprint :refer [pprint]])
-  (:use [db.set]))
+            [clojure.pprint :refer [pprint]]))
 
 (defn event [type attributes & {:keys [where] :as attrs}]
   (merge {:type type
