@@ -13,8 +13,8 @@
     (mapcat filter-attribute)
     (apply hash-map)))
 
-(defn transaction [& {:keys [type where attributes]}]
-  {:type type ; assert :assert/reject
+(defn statement [& {:keys [type where attributes]}]
+  {:type type ; assert :assert/retract
    :date (java.util.Date.)
    :where where ; validation?
    :attributes attributes})
@@ -51,19 +51,20 @@
     (update-entities entities where attributes)
     (insert-entity entities attributes)))
 
-(defn execute-reject [{:keys [entities]} {:keys [where attributes]}]
+(defn execute-retract [{:keys [entities]} {:keys [where attributes]}]
   (if attributes
     (update-entities-with #(apply dissoc % attributes) entities where)
     (replace-entities entities (select entities where) #{})))
 
-(defn execute-transaction [state transaction]
-  (case (:type transaction)
-    :assert (execute-assert state transaction)
-    :reject (execute-reject state transaction)))
+(defn execute-statement [state statement]
+  (assoc state :entities
+    (case (:type statement)
+      :assert  (execute-assert state statement)
+      :retract (execute-retract state statement))))
 
 (defn replay [history]
   (let [initial-state {:attributes #{} :entities #{}}]
-    (reduce execute-transaction initial-state history)))
+    (reduce execute-statement initial-state history)))
 
 
 
@@ -84,21 +85,21 @@
 
 ; Client
 (defn query [db & {:keys [where pluck] :or {:where {}}}]
-  (-> db :state :entities
-   (select where)))
+  (let [entities (-> db :state :entities)
+        matching (select entities where)
+        keys     (or pluck (mapcat keys matching))]
+    (map #(select-keys % keys) matching)))
+
+(def assert  (partial statement :type :assert))
+(def retract (partial statement :type :retract))
 
 
-(defn assert [params]
-  ())
+; Test data
 
-(defn retract [params]
-  ())
+(def history #{(assert :attributes {:age 4  :name "Lieuwe"})
+               (assert :attributes {:age 19 :name "Rein"})
+               (assert :attributes {:age 15 :name "Stephan"})})
 
-(def testdb {:history #{}
-             :state {:attributes #{}
-                     :entities   #{{:age 4  :name "Lieuwe"}
-                                   {:age 19 :name "Rein"}
-                                   {:age 15 :name "Stephan"}}}
-             :file    "db.edn"})
+(def state (replay history))
 
-(def testassertion (transaction :type :reject :where {:age 18}))
+(def testassertion (assert :where {:age 19}))
