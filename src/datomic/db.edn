@@ -1,0 +1,6 @@
+; Format:
+; {:type :assert/:retract
+;  :date *timestamp*
+;  :entityId *integer*
+;  :attribute :keyword
+;  :value *value*}
