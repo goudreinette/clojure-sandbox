@@ -27,18 +27,34 @@
 (defn select [entities where]
   (set/select #(matches? % where) entities))
 
-; State
-; Find
+; Set helpers
+(defn replace-entities [entities a b]
+  (-> entities
+    (set/difference a)
+    (set/union b)))
 
-(defn execute-assert [{:keys [entities]} {:keys [where attributes]}]
+(defn update-entities-with [f entities where]
   (let [matching (select entities where)
-        updated  (map #(merge % attributes) matching)]
-    (-> entities
-      (set/difference matching)
-      (set/union updated))))
+        updated  (map f matching)]
+    (replace-entities entities matching updated)))
 
-(defn execute-reject [state transaction]
-  ())
+(defn update-entities [entities where attributes]
+  (update-entities-with #(merge % attributes) entities where))
+
+(defn insert-entity [entities new-entity]
+  (set/union entities #{new-entity}))
+
+
+; Statements
+(defn execute-assert [{:keys [entities]} {:keys [where attributes]}]
+  (if where
+    (update-entities entities where attributes)
+    (insert-entity entities attributes)))
+
+(defn execute-reject [{:keys [entities]} {:keys [where attributes]}]
+  (if attributes
+    (update-entities-with #(apply dissoc % attributes) entities where)
+    (replace-entities entities (select entities where) #{})))
 
 (defn execute-transaction [state transaction]
   (case (:type transaction)
@@ -85,4 +101,4 @@
                                    {:age 15 :name "Stephan"}}}
              :file    "db.edn"})
 
-(def testassertion (transaction :type :assert :where {:name "Rein" :age 19} :attributes {:age 20}))
+(def testassertion (transaction :type :reject :where {:age 18}))
