@@ -1,16 +1,15 @@
 #{{:type :assert,
    :attributes {:color :red},
-   :where nil,
-   :date #inst "2017-01-12T21:23:36.295-00:00"}
+   :date #inst "2017-01-12T21:53:58.860-00:00",
+   :where {:color :green}}
   {:type :assert,
-   :where nil,
-   :attributes {:color :yellow},
-   :date #inst "2017-01-12T20:53:44.659-00:00"}
+   :attributes {:color :red},
+   :date #inst "2017-01-12T21:54:34.357-00:00",
+   :where {:color :greem}}
   {:type :assert,
-   :attributes {:color :blue},
-   :where {:color :red},
-   :date #inst "2017-01-12T21:45:43.274-00:00"}
+   :attributes {:color :greem},
+   :date #inst "2017-01-12T21:53:25.462-00:00",
+   :where {:color :blue}}
   {:type :assert,
-   :attributes {:color :blue},
-   :where {:color :red},
-   :date #inst "2017-01-12T21:46:23.098-00:00"}}
+   :attributes {:color :greem},
+   :date #inst "2017-01-12T21:52:58.302-00:00"}}

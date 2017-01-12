@@ -3,16 +3,16 @@
             [clojure.pprint :refer [pprint]])
   (:use [db.set]))
 
-(defn event [type attributes & {:keys [where]}]
-  {:type type
-   :attributes attributes
-   :where where
-   :date (java.util.Date.)})
+(defn event [type attributes & {:keys [where] :as attrs}]
+  (merge {:type type
+          :attributes attributes
+          :date (java.util.Date.)}
+         attrs))
 
 (defn transition [state event]
   (match [event]
-    [{:type :assert :where nil :attributes a}] (insert-entity state a)
     [{:type :assert :where w :attributes a}] (update-entities state w a)
+    [{:type :assert :attributes a}] (insert-entity state a)
     [{:type :retract :attributes a :where w}] state
     [{:type :retract :attributes a}] state
     [{:type :retract :where w}] state))
