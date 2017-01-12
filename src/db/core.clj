@@ -24,8 +24,8 @@
   (spit (db :file) (with-out-str (pprint (db :history)))))
 
 
-(defn exec-event! [type db attributes]
-  (let [event (event type attributes)
+(defn exec-event! [type db attributes & args]
+  (let [event (apply event type attributes args)
         history (conj (:history @db) event)
         state (transition (:state @db) event)]
     (swap! db #(assoc % :history history :state state))
