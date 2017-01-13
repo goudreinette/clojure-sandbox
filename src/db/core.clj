@@ -9,13 +9,13 @@
           :date (java.util.Date.)}
          attrs))
 
-(defn transition [state event]
+(defn transition [all event]
   (match [event]
-    [{:type :assert :where w :attributes a}] (update-entities state w a)
-    [{:type :assert :attributes a}] (insert-entity state a)
-    [{:type :retract :attributes a :where w}] state
-    [{:type :retract :attributes a}] state
-    [{:type :retract :where w}] state))
+    [{:type :assert :attributes a :where w }] (update-where all w a)
+    [{:type :assert :attributes a}]           (insert all a)
+    [{:type :retract :attributes a :where w}] (remove-attrs-where all w a)
+    [{:type :retract :attributes a}]          (remove-attrs-where all {} a) ; or all?
+    [{:type :retract :where w}]               (remove-where all w)))
 
 (defn replay [history]
   (reduce transition #{} (sort-by :date  history)))
@@ -23,10 +23,12 @@
 (defn save [db]
   (spit (db :file) (with-out-str (pprint (db :history)))))
 
+(defn exec-event [type db attributes & args]
+  (let [event   (apply event type attributes args)
+        history (conj (:history db) event)
+        state   (transition (:state db) event)]
+    (assoc db :history history :state state)))
 
 (defn exec-event! [type db attributes & args]
-  (let [event (apply event type attributes args)
-        history (conj (:history @db) event)
-        state (transition (:state @db) event)]
-    (swap! db #(assoc % :history history :state state))
-    (save @db)))
+  (swap! db #(apply exec-event type db attributes args))
+  (save @db))

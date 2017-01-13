@@ -11,6 +11,8 @@
 (def assert!  (partial exec-event! :assert))
 (def retract! (partial exec-event! :retract))
 
+(defn find! [db & {:keys [project where at]}])
+
 
 ; Testing
 (def db (init "db.edn"))
