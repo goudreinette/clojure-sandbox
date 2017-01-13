@@ -16,7 +16,7 @@
         state-at-date      (replay history-until-date)]
     state-at-date))
 
-
+; (find! db :revert {4 :hours} :project [:likes] :where {:name "Me"})
 (defn find! [db & {r :revert w :where p :project}]
   (let [all       (if r (revert db r) (:state @db))
         where     (or w {})
