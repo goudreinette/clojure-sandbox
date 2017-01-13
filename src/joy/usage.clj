@@ -20,5 +20,6 @@
   :name String
   :age  Long)
 
-(deftyped double :: [Long x -> Long]
-  (* 2 x))
+
+(repeat-until true
+  (println "do-while"))

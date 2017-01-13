@@ -79,4 +79,9 @@
   (every? #(entry-valid? schema %) data))
 
 
-; repeat ... until
+; repeat-until
+(defmacro repeat-until [test & body]
+ `(loop []
+    ~@body
+    (when-not ~test
+      (recur))))
