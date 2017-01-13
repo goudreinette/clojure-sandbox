@@ -19,11 +19,10 @@
   (conj all entity))
 
 (defn update-where [where attrs all]
-  (println "this")
   (update-matching #(merge % attrs) where all))
 
 (defn remove-attrs-where [where keys all]
-  (update-matching #(select-keys % keys) where all))
+  (update-matching #(apply dissoc % keys) where all))
 
 (defn remove-where [where all]
-  (set/select #(not (match? where %) all)))
+  (set/select #(not (match? where %)) all))
