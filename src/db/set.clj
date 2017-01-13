@@ -1,25 +1,28 @@
 (ns db.set
   (:require [clojure.set :as set]))
 
-(defn matches? [entity where]
+(defn- matches? [entity where]
   (= (select-keys entity (keys where)) where))
 
-(defn select [entities where]
+(defn- select [entities where]
   (set/select #(matches? % where) entities))
 
-; Set helpers 
-(defn replace-entities [entities a b]
-  (-> entities
-    (set/difference a)
-    (set/union b)))
+(defn- update-matching [all where f]
+  (let [matching ((select all where))
+        updated (map f matching)]
+    (-> all
+      (set/difference matching)
+      (set/union updated))))
 
-(defn update-entities-with [f entities where]
-  (let [matching (select entities where)
-        updated  (map f matching)]
-    (replace-entities entities matching updated)))
 
-(defn update-entities [entities where attributes]
-  (update-entities-with #(merge % attributes) entities where))
+(defn insert [all entity]
+  (conj all entity))
 
-(defn insert-entity [entities new-entity]
-  (set/union entities #{new-entity}))
+(defn update-where [all where attrs]
+  (update-matching all where #(merge % attrs)))
+
+(defn remove-attrs-where [all where keys]
+  (update-matching all where #(select-keys % keys)))
+
+(defn remove-where [all where]
+  (set/difference all (select all where)))
