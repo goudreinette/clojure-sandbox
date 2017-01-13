@@ -1,5 +1,5 @@
 (ns db.api
-  (:use [db core persistence set])
+  (:use [db core date set])
   (:require [hara.time :refer [now before minus]]
             [clojure.set :refer [map-invert]]))
 
@@ -12,14 +12,17 @@
   (let [{history :history} @db
         date-map           (map-invert inverted-date)
         date               (-> (now) (minus date-map))
-        history-at-date    (take-while #(before (:date %) date) history)
-        state-at-date      (replay history-at-date)]
+        history-until-date (take-while #(before (:date %) date) history)
+        state-at-date      (replay history-until-date)]
     state-at-date))
 
 
-(defn find! [db & {r :revert}]
-  (let [state (if r (revert db r) (:state @db))]
-    state))
+(defn find! [db & {r :revert w :where p :project}]
+  (let [all       (if r (revert db r) (:state @db))
+        where     (or w {})
+        filtered  (select where all)
+        projected (if p (map #(select-keys % p) filtered) filtered)]
+    projected))
 
 ; Testing
 (def db (init "db.edn"))
