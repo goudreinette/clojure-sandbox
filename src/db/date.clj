@@ -1,4 +1,4 @@
-(ns db.persistence
+(ns db.date
   (:require [hara.time :refer [now to-long to-map from-long]]))
 
 ; Date

@@ -1,5 +1,5 @@
 (ns db.core
-  (:use [db persistence set])
+  (:use [db date set])
   (:require [clojure.core.match :refer [match]]
             [hara.time :refer [now]]
             [clojure.pprint :refer [pprint]]))
