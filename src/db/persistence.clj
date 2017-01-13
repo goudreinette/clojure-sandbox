@@ -14,8 +14,13 @@
 ; Persistence
 (defn init [file]
   (let [history (->> file slurp read-string (sort-by :date) long->date)
-        state   (replay history)]
-    (atom {:file file :history history :state state})))
+        state   (replay history)
+        current-id (apply max-key :id state)]
+    (atom
+      {:file file
+       :history history
+       :state state
+       :current-id current-id})))
 
 (defn save [db]
   (->> db :history

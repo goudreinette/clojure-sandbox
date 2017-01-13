@@ -14,5 +14,5 @@
   (transition #{{:age 4 :name "Lieuwe"}} (event :assert {:age 5} :where {:name "Lieuwe"})) => #{{:age 5 :name "Lieuwe"}}
   ; Remove Attributes
   (transition #{{:age 4 :name "Lieuwe"}} (event :retract [:age])) => #{{:name "Lieuwe"}}
-  ; Remove
+  ; Remove Entity
   (transition #{{:color :blue} {:color :yellow}} {:type :retract :where {:color :yellow}}) => #{{:color :blue}})
