@@ -10,25 +10,23 @@
          attrs))
 
 (defn transition [all event]
-  (match [event]
-    [{:type :assert :attributes a :where w }] (update-where all w a)
-    [{:type :assert :attributes a}]           (insert all a)
-    [{:type :retract :attributes a :where w}] (remove-attrs-where all w a)
-    [{:type :retract :attributes a}]          (remove-attrs-where all {} a) ; or all?
-    [{:type :retract :where w}]               (remove-where all w)))
+  (set
+    (match [event]
+      [{:type :assert  :attributes a :where w }] (update-where w a all)
+      [{:type :assert  :attributes a          }] (insert a all)
+      [{:type :retract :attributes a :where w }] (remove-attrs-where w a all)
+      [{:type :retract :attributes a          }] (remove-attrs-where {} a all) ; or all?
+      [{:type :retract               :where w }] (remove-where w all))))
 
 (defn replay [history]
-  (reduce transition #{} (sort-by :date  history)))
+  (reduce transition #{} (sort-by :date history)))
 
 (defn save [db]
   (spit (db :file) (with-out-str (pprint (db :history)))))
 
-(defn exec-event [type db attributes & args]
-  (let [event   (apply event type attributes args)
-        history (conj (:history db) event)
-        state   (transition (:state db) event)]
-    (assoc db :history history :state state)))
-
 (defn exec-event! [type db attributes & args]
-  (swap! db #(apply exec-event type db attributes args))
-  (save @db))
+  (let [event   (event type attributes)
+        history (conj (:history @db) event)
+        state   (transition (:state @db) event)]
+    (swap! db #(assoc % :history history :state state))
+    (save @db)))

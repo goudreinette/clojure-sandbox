@@ -2,25 +2,25 @@
   (:require [clojure.set :as set]))
 
 ; Private
-(defn- match? [entity where]
+(defn- match? [where entity]
   (= (select-keys entity (keys where)) where))
 
-(defn- select [all where]
-  (set/select #(match? % where) all))
+(defn- select [where all]
+  (set/select #(match? where % ) all))
 
 (defn- update-matching [f where all]
-  (map #(if (match? % where) (f %) %)
+  (map #(if (match? where %) (f %) %)
        all))
 
 ; Public
-(defn insert [all entity]
+(defn insert [entity all]
   (conj all entity))
 
-(defn update-where [where all attrs]
+(defn update-where [where attrs all]
   (update-matching #(merge % attrs) where all))
 
-(defn remove-where [where all]
-  (remove #(match? % where) all))
-
-(defn remove-attrs-where [all where keys]
+(defn remove-attrs-where [where keys all]
   (update-matching #(select-keys % keys) where all))
+
+(defn remove-where [where all]
+  (set/select #(not (match? where %) all)))

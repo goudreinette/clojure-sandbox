@@ -1,15 +1,6 @@
-#{{:type :assert,
-   :attributes {:color :red},
-   :date #inst "2017-01-12T21:53:58.860-00:00",
-   :where {:color :green}}
-  {:type :assert,
-   :attributes {:color :red},
-   :date #inst "2017-01-12T21:54:34.357-00:00",
-   :where {:color :greem}}
-  {:type :assert,
-   :attributes {:color :greem},
-   :date #inst "2017-01-12T21:53:25.462-00:00",
-   :where {:color :blue}}
-  {:type :assert,
-   :attributes {:color :greem},
-   :date #inst "2017-01-12T21:52:58.302-00:00"}}
+({:type :assert,
+  :attributes {:color :red},
+  :date #inst "2017-01-13T13:34:14.159-00:00"}
+ {:type :assert,
+  :attributes {:color :red},
+  :date #inst "2017-01-13T13:34:08.485-00:00"})
