@@ -27,4 +27,4 @@
 
 
 ; Testing
-(def db (init "db.edn"))
+; (def db (init "db.edn"))

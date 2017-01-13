@@ -19,7 +19,7 @@
       [{:type :retract               :where w }] (remove-where w all))))
 
 (defn replay [history]
-  (reduce transition #{} (sort-by :date history)))
+  (reduce transition #{} history))
 
 
 (defn exec-event! [type db attributes & args]

@@ -13,7 +13,7 @@
 
 ; Persistence
 (defn init [file]
-  (let [history (-> file slurp read-string long->date)
+  (let [history (->> file slurp read-string (sort-by :date) long->date)
         state   (replay history)]
     (atom {:file file :history history :state state})))
 
