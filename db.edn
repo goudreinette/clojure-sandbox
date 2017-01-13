@@ -1,3 +1,7 @@
-({:type :assert,
+({:type :assert, :attributes {:likes :espresso}, :date 1484321368056}
+ {:type :assert, :attributes {:likes :espresso}, :date 1484321351197}
+ {:type :assert, :attributes {:likes :espresso}, :date 1484321311833}
+ {:type :assert, :attributes {:likes :espresso}, :date 1484321267813}
+ {:type :assert,
   :attributes {:name "Me", :likes [:coffee]},
   :date 1484320696823})

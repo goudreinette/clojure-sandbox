@@ -1,6 +1,6 @@
 (ns db.api
   (:use [db core persistence set])
-  (:require [hara.time :refer [now before minus from-long to-map]]
+  (:require [hara.time :refer [now before minus]]
             [clojure.set :refer [map-invert]]))
 
 
