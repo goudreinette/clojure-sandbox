@@ -4,10 +4,10 @@
             [hara.time :refer [now]]))
 
 (defn event [type attributes & {:keys [where] :as attrs}]
-  (merge {:type type
-          :attributes attributes
-          :date (now)}
-         attrs))
+  (merge attrs {:type type
+                :attributes attributes
+                :date (now)}))
+
 
 (defn transition [all event]
   (set
