@@ -1,16 +1,8 @@
 (ns db.api
-  (:use db.core)
-  (:require [db.set :refer [select]]
-            [hara.time :refer [now before minus from-long to-map]]))
+  (:use [db core persistence set])
+  (:require [hara.time :refer [now before minus from-long to-map]]
+            [clojure.set :refer [map-invert]]))
 
-(defn init [file]
-  (let [history (-> file slurp read-string)
-        history (map #(update % :date from-long) history)
-        _ (prn history)
-        state (replay history)]
-    (atom {:file file
-           :history history
-           :state state})))
 
 (def assert!  (partial exec-event! :assert))
 (def retract! (partial exec-event! :retract))
@@ -21,7 +13,11 @@
         state-at-date (replay history-at-date)]
     state-at-date))
 
-(def at-now-minus #(at %1 (-> (now) (minus %2))))
+(defn revert [db & {:as date}]
+  (at db
+    (-> (now)
+        (minus (map-invert date)))))
+
 
 (defn find! [db & {p :project w :where a :at}]
   (cond-> @db
