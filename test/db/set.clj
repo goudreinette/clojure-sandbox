@@ -1,4 +1,4 @@
-(ns test
+(ns db.set
   (:use midje.sweet))
 
 (facts "about addition"
