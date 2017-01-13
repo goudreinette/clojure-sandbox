@@ -1,12 +1,13 @@
 (ns db.core
   (:use [db.set])
   (:require [clojure.core.match :refer [match]]
-            [clojure.pprint :refer [pprint]]))
+            [clojure.pprint :refer [pprint]]
+            [hara.time :refer [now to-long]]))
 
 (defn event [type attributes & {:keys [where] :as attrs}]
   (merge {:type type
           :attributes attributes
-          :date (java.util.Date.)}
+          :date (now)}
          attrs))
 
 (defn transition [all event]
@@ -22,7 +23,12 @@
   (reduce transition #{} (sort-by :date history)))
 
 (defn save [db]
-  (spit (db :file) (with-out-str (pprint (db :history)))))
+  (->> db
+    (:history)
+    (map #(update % :date to-long))
+    (pprint)
+    (with-out-str)
+    (spit (db :file))))
 
 (defn exec-event! [type db attributes & args]
   (let [event   (event type attributes)

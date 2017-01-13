@@ -1,18 +1,20 @@
 (ns db.set
   (:require [clojure.set :as set]))
 
-; Private
-(defn- match? [where entity]
+
+(defn match? [where entity]
   (= (select-keys entity (keys where)) where))
 
-(defn- select [where all]
+(defn select [where all]
   (set/select #(match? where % ) all))
 
-(defn- update-matching [f where all]
+(defn update-matching [f where all]
   (map #(if (match? where %) (f %) %)
        all))
 
-; Public
+
+
+
 (defn insert [entity all]
   (conj all entity))
 
