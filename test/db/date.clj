@@ -1,7 +1,7 @@
 (ns db.date
   (:use db.date)
   (:require [midje.sweet :refer [facts contains]])
-  (:require [hara.time :refer [now minus epoch]]))
+  (:require [hara.time :refer [now minus epoch day]]))
 
 
 (facts "about date-range"
@@ -10,3 +10,7 @@
    (first range) => (contains {:day 25})
    (last  range) => (contains {:day 31})
    (count range) => 7))
+
+(facts "about absolute-date"
+  ((absolute-date :rewind {3 :days}) :day) => (- (day (now)) 3)
+  ((absolute-date :at     {:day  5}) :day) => 5)
