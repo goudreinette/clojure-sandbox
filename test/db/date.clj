@@ -12,5 +12,5 @@
    (count range) => 7))
 
 (facts "about absolute-date"
-  ((absolute-date :rewind {3 :days}) :day) => (- (day (now)) 3)
-  ((absolute-date :at     {:day  5}) :day) => 5)
+  ((absolute-date :rewind {3 :days} :at nil) :day) => (- (day (now)) 3)
+  ((absolute-date :at     {:day  5}        ) :day) => 5)
