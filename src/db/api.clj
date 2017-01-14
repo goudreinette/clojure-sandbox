@@ -8,7 +8,7 @@
 (def retract! (partial exec-event! :retract))
 
 
-(defn revert [db inverted-date]
+(defn rewind [db inverted-date]
   (let [{history :history} @db
         date-map           (map-invert inverted-date)
         date               (-> (now) (minus date-map))
@@ -16,13 +16,19 @@
         state-at-date      (replay history-until-date)]
     state-at-date))
 
-; (find! db :revert {4 :hours} :project [:likes] :where {:name "Me"})
-(defn find! [db & {r :revert w :where p :project}]
-  (let [all       (if r (revert db r) (:state @db))
+; (find! db :rewind {4 :hours} :project [:likes] :where {:name "Me"})
+(defn find! [db & {r :rewind w :where p :project}]
+  (let [all       (if r (rewind db r) (:state @db))
         where     (or w {})
         filtered  (select where all)
         projected (if p (map #(select-keys % p) filtered) filtered)]
     projected))
 
+
+(defn slice! [db & {f :from t :to w :by b :where p :project}]
+  ())
+
+
+
 ; Testing
-(def db (init "db.edn"))
+; (def db (init "db.edn"))
