@@ -1,6 +1,7 @@
 (ns db.api
   (:use [db core date set])
-  (:require [hara.time :refer [now before minus adjust from-map]]))
+  (:refer-clojure :exclude [format])
+  (:require [hara.time :refer [now before minus adjust from-map coerce format]]))
 
 
 ; Helpers
@@ -21,12 +22,14 @@
     projected))
 
 
-(defn slice! [db & {from :from to :to by :by where :where project :project}]
+(defn slice! [db & {:keys [from to by where project]}]
   (let [from    (absolute-date :at from)
         to      (absolute-date :at to)
-        dates   (map #(from-map {:type java.util.Date}) (date-range from to by))
+        dates   (date-range from to by)
+        dates-i (map #(format % "E dd-MM-yyy HH:ss") dates)
+        _ (println dates-i)
         results (map #(find! db :at % :where where :project project) dates)]
-    (zipmap dates results)))
+      (map vector dates-i results)))
 
 (def assert!  (partial exec-event! :assert))
 (def retract! (partial exec-event! :retract))

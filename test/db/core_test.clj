@@ -1,4 +1,4 @@
-(ns db.core.test
+(ns db.core-test
   (:use midje.sweet)
   (:require [db.core :refer [transition event]]))
 

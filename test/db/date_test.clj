@@ -1,4 +1,4 @@
-(ns db.date.test
+(ns db.date-test
   (:use db.date)
   (:require [midje.sweet :refer [facts contains]])
   (:require [hara.time :refer [now minus epoch day]]))

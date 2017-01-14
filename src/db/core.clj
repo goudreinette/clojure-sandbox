@@ -5,9 +5,9 @@
             [clojure.pprint :refer [pprint]]))
 
 (defn event [type attributes & {:keys [where] :as attrs}]
-  (merge attrs {:type type
-                :attributes attributes
-                :date (now)}))
+  (merge {:type type
+          :attributes attributes
+          :date (now)} attrs))
 
 
 (defn transition [all event]
@@ -43,7 +43,6 @@
 (defn exec-event! [type db attributes & args]
   (let [event   (event type attributes)
         history (conj (:history @db) event)
-        state   (transition (:state @db) event)
-        id      (inc (or (apply max-key :id) 0))]
+        state   (transition (:state @db) event)]
     (swap! db #(assoc % :history history :state state))
     (save @db)))
