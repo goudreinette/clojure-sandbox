@@ -1,7 +1,6 @@
 (ns db.api
   (:use [db core date set])
-  (:refer-clojure :exclude [format])
-  (:require [hara.time :refer [now before minus adjust from-map coerce format]]))
+  (:require [hara.time :refer [now before minus adjust from-map]]))
 
 
 ; Helpers
@@ -26,8 +25,7 @@
   (let [from    (absolute-date :at from)
         to      (absolute-date :at to)
         dates   (date-range from to by)
-        dates-i (map #(format % "E dd-MM-yyy HH:ss") dates)
-        _ (println dates-i)
+        dates-i (map format-date dates)
         results (map #(find! db :at % :where where :project project) dates)]
       (map vector dates-i results)))
 

@@ -1,14 +1,17 @@
 (ns db.date
-  (:require [hara.time :refer [now to-long to-map plus minus after before adjust]]
+  (:refer-clojure :exclude [format])
+  (:require [hara.time :refer [now to-long to-map plus minus after before adjust format]]
             [clojure.set :refer [map-invert]]))
 
 
-; Date
 (defn- date-converter [f]
   (fn [history] (map #(update % :date f) history)))
 
 (def long->date (date-converter to-map))
 (def date->long (date-converter to-long))
+
+(defn format-date [date]
+  (format date "E dd-MM-yyy HH:ss"))
 
 (defn date-range [from to by]
   (take-while #(before % to)
