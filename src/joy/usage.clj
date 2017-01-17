@@ -1,5 +1,6 @@
 (ns joy.usage
-  (:use joy.macros))
+  (use joy.macros)
+  (require [let-else :refer [let?]]))
 
 (condf 9
   (>= 10)  "default"
@@ -22,3 +23,9 @@
 
 (repeat-until true
   (println "do-while"))
+
+(let? [a nil
+       b a :when (some? a)
+       n 2
+       m n :is even?]
+  [a b n m])
