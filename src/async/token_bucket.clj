@@ -1,5 +1,5 @@
-(ns token-bucket
-  (:require [clojure.core.async :refer [chan <! >! go go-loop timeout to-chan]]
+(ns async.token-bucket
+  (:require [clojure.core.async :refer [chan <! >! go close! go-loop timeout to-chan]]
             [async.macros :refer :all]))
 
 
