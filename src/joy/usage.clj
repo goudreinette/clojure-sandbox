@@ -26,3 +26,7 @@
 
 (le a 10
   a)
+
+(cond-apply [1 2]
+  true +
+  true -)
