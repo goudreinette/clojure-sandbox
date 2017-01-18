@@ -90,3 +90,7 @@
 (defmacro le [name value & body]
  `(let [~name ~value]
     ~@body))
+
+; apply same argument to different functions depending on condition
+(defmacro cond-apply [args & clauses]
+  `(apply (cond ~@clauses) ~args))

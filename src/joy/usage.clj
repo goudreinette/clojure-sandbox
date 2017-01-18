@@ -24,11 +24,5 @@
 (repeat-until true
   (println "do-while"))
 
-; (let? [a nil
-;        b a :when (some? a)
-;        n 2
-;        m n :is even?]
-;   [a b n m])
-
 (le a 10
   a)
