@@ -1,4 +1,4 @@
-(defproject sandbox "0.0.1"
+(defproject reinvdwoerd/sandbox "0.0.1"
   :description ""
   :dependencies
     [[org.clojure/clojure "1.8.0"]
