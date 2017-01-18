@@ -85,3 +85,8 @@
     ~@body
     (when-not ~test
       (recur))))
+
+; single let
+(defmacro le [name value & body]
+ `(let [~name ~value]
+    ~@body))
