@@ -1,4 +1,4 @@
-(ns events
+(ns eventsourcing.events
   (:require [clojure.edn :as edn]))
 
 (defn validate-attributes
