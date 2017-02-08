@@ -9,8 +9,9 @@
      [proto-repl "0.3.1"]
      [org.clojure/core.logic "0.8.11"]
      [org.clojure/core.unify "0.5.7"]
-     [egamble/let-else "1.0.7"]]
+     [egamble/let-else "1.0.7"]
+     [org.clojure/java.jdbc "0.7.0-alpha1"]]
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
-             :dev {:source-paths ["src" "test"]
+             :dev {:source-paths ["src/sandbox" "test"]
                    :dependencies [[midje "1.8.3"]]}})
