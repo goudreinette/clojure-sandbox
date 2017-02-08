@@ -10,8 +10,9 @@
      [org.clojure/core.logic "0.8.11"]
      [org.clojure/core.unify "0.5.7"]
      [egamble/let-else "1.0.7"]
-     [org.clojure/java.jdbc "0.7.0-alpha1"]]
-  :target-path "target/%s"
+     [org.clojure/java.jdbc "0.7.0-alpha1"]
+     [prismatic/schema "1.1.3"]]
+  :exclude "src/old"
   :profiles {:uberjar {:aot :all}
-             :dev {:source-paths ["src/sandbox" "test"]
+             :dev {:source-paths ["src" "test"]
                    :dependencies [[midje "1.8.3"]]}})
