@@ -1,8 +1,12 @@
 (ns sandbox.eventsourcing
-  (require [schema.core :refer [defschema validate Any Symbol Keyword]])
-  (import java.util.Date))
+  (:require [clojure.spec :as s])
+  (:import java.util.Date))
 
-(defschema Event
-  {:type        Symbol
-   :attributes {Keyword Any}
-   :date        Date})
+
+(s/def ::type symbol?)
+(s/def ::attributes map?)
+(s/def ::date #(isa? % Date))
+
+
+(def user-spec (s/keys :req [::first-name ::last-name ::email]
+                       :opt [::phone]))

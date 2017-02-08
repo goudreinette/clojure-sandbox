@@ -5,14 +5,7 @@
      [org.clojure/core.incubator "0.1.4"]
      [org.clojure/core.async "0.2.395"]
      [org.clojure/core.match "0.3.0-alpha4"]
-     [im.chit/hara.time "2.4.8"]
-     [proto-repl "0.3.1"]
-     [org.clojure/core.logic "0.8.11"]
-     [org.clojure/core.unify "0.5.7"]
-     [egamble/let-else "1.0.7"]
-     [org.clojure/java.jdbc "0.7.0-alpha1"]
-     [prismatic/schema "1.1.3"]]
-  :exclude "src/old"
+     [proto-repl "0.3.1"]]
   :profiles {:uberjar {:aot :all}
              :dev {:source-paths ["src" "test"]
                    :dependencies [[midje "1.8.3"]]}})
