@@ -19,3 +19,14 @@
     (assoc attributes
       ::type type
       ::date (Date.))))
+
+
+; macro's
+(defmacro defevent-keys [type & {:keys [req opt]}]
+  `(defmethod event-type ~type [~'_]
+     (s/keys :req ~req :opt ~opt)))
+
+(defmacro defevent [type & {:keys [req opt]}]
+  `(do
+     (defevent-keys ~(keyword type) :req ~req :opt ~opt)
+     (def ~type ~(partial event (keyword type)))))
