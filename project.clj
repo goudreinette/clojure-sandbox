@@ -10,4 +10,4 @@
      [proto-repl "0.3.1"]]
   :profiles {:uberjar {:aot :all}
              :dev {:source-paths ["src" "test"]
-                   :dependencies [[midje "1.8.3"]]}})
+                   :dependencies [[midje "1.9.0-alpha6"]]}})
