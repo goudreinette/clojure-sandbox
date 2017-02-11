@@ -1,20 +1,21 @@
 (ns event-sourcing.event
-  (:require [clojure.spec :as s])
+  (:require [clojure.spec :as s]
+            [sandbox.spec :refer [defschema]])
   (:import java.util.Date))
 
 
-(s/def ::date inst?)
-(s/def ::type keyword?)
-
+(defschema event
+  ::date inst?
+  ::type keyword?)
 
 (defmulti event-type ::type)
 (defmethod event-type :default [_]
   (s/keys :req []))
 
 (s/def ::event (s/merge (s/multi-spec event-type ::type)
-                        (s/keys :req [::date ::type])))
+                        event))
 
-(defn event [type & {:as attributes}]
+(defn make-event [type & {:as attributes}]
   (s/conform ::event
     (assoc attributes
       ::type type
@@ -29,4 +30,4 @@
 (defmacro defevent [type & {:keys [req opt]}]
   `(do
      (defevent-keys ~(keyword type) :req ~req :opt ~opt)
-     (def ~type ~(partial event (keyword type)))))
+     (def ~type ~(partial make-event (keyword type)))))
