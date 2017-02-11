@@ -1,5 +1,5 @@
 (ns event-sourcing.example
-  (:use sandbox.event sandbox.api)
+  (:use event-sourcing.event)
   (:require [clojure.spec :as s]))
 
 (defevent user-registered
