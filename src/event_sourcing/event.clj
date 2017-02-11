@@ -1,4 +1,4 @@
-(ns sandbox.event
+(ns event-sourcing.event
   (:require [clojure.spec :as s])
   (:import java.util.Date))
 
