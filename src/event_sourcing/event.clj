@@ -4,30 +4,16 @@
   (:import java.util.Date))
 
 
-(defschema event
-  ::date inst?
-  ::type keyword?)
+(defschema ::event
+  ::type keyword?
+  ::date inst?)
 
-(defmulti event-type ::type)
-(defmethod event-type :default [_]
-  (s/keys :req []))
+(defn validate-event [spec event]
+  (s/conform (s/merge spec ::event)
+    event))
 
-(s/def ::event (s/merge (s/multi-spec event-type ::type)
-                        event))
-
-(defn make-event [type & {:as attributes}]
-  (s/conform ::event
+(defn make-event [spec & {:as attributes}]
+  (validate-event spec
     (assoc attributes
-      ::type type
+      ::type spec
       ::date (Date.))))
-
-
-; macro's
-(defmacro defevent-keys [type & {:keys [req opt]}]
-  `(defmethod event-type ~type [~'_]
-     (s/keys :req ~req :opt ~opt)))
-
-(defmacro defevent [type & {:keys [req opt]}]
-  `(do
-     (defevent-keys ~(keyword type) :req ~req :opt ~opt)
-     (def ~type ~(partial make-event (keyword type)))))

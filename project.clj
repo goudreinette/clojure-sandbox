@@ -7,6 +7,7 @@
      [org.clojure/core.match "0.3.0-alpha4"]
      [compojure "1.6.0-beta3"]
      [http-kit "2.3.0-alpha1"]
+     [prismatic/schema "1.1.3"]
      [proto-repl "0.3.1"]]
   :profiles {:uberjar {:aot :all}
              :dev {:source-paths ["src" "test"]

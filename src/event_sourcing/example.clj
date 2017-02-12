@@ -1,6 +1,10 @@
 (ns event-sourcing.example
-  (:use event-sourcing.event)
+  (:use event-sourcing.event sandbox.spec)
   (:require [clojure.spec :as s]))
 
-(defevent user-registered
-  :req [::username ::password])
+
+(defschema ::session-started
+  ::job-id int?
+  ::user-id int?)
+
+(make-event ::session-started ::job-id 1 ::user-id 1)

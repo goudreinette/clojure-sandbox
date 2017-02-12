@@ -2,7 +2,7 @@
   (:require [clojure.spec :as s]))
 
 (defn def-map-spec [name kvs]
- `(def ~name ~(s/keys :req ~@(keys kvs))))
+ `(s/def ~name ~(s/keys :req ~@(keys kvs))))
 
 (defn def-keyword-specs [kw-specs]
   (for [[kw spec] kw-specs] `(s/def ~kw ~spec)))
@@ -16,10 +16,10 @@
     ~(def-keyword-specs kw-specs)))
 
 
-; Usage
-(defschema person
+(defschema ::person
   ::name string?
   ::age int?)
+
 
 (defspecs
   :dog/name string?
