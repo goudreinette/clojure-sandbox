@@ -1,15 +1,31 @@
 (ns event-sourcing.server
   (:use org.httpkit.server compojure.core)
-  (:require [clojure.core.match :refer [match]]))
+  (:require [clojure.core.match :refer [match]]
+            [ring.middleware.json :as middleware]))
 
-(def state  {:events []})
 
-(defn transition [state event]
-  (-> state
-    (update :events #(cons event %))))
+(defmulti transition :event-sourcing.event/type)
 
-(defroutes main
+(defn initial-state []
+  (atom {:events []
+         :entities []}))
+
+(defn replay [events]
+  (reduce transition (initial-state) events))
+
+
+; ---
+(def state (initial-state))
+
+(defroutes event-routes
   (GET "/" []
-    @state)
-  (POST "/:event-type" [event-type]
-    (swap! state #(transition % event-type))))
+    (@state :entities))
+  (GET "/events" []
+    (@state :events))
+  (POST "/" {event :params}
+    (swap! state #(transition % event))))
+
+
+(run-server (-> event-routes
+                (middleware/wrap-json-body {:keywords? true})
+                (middleware/wrap-json-response)))

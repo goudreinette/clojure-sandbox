@@ -8,6 +8,7 @@
      [compojure "1.6.0-beta3"]
      [http-kit "2.3.0-alpha1"]
      [prismatic/schema "1.1.3"]
+     [ring/ring-json "0.3.1"]
      [proto-repl "0.3.1"]]
   :profiles {:uberjar {:aot :all}
              :dev {:source-paths ["src" "test"]
