@@ -8,13 +8,12 @@
   (for [[kw spec] kw-specs] `(s/def ~kw ~spec)))
 
 (defmacro defspecs [& {:as kw-specs}]
- `(do (def-keyword-specs ~kw-specs)))
+ `(do ~(def-keyword-specs kw-specs)))
 
 (defmacro defschema [name & {:as kw-specs}]
  `(do
     ~(def-map-spec name kw-specs)
     ~(def-keyword-specs kw-specs)))
-
 
 
 ; Usage
