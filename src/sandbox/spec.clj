@@ -4,15 +4,25 @@
 (defn def-map-spec [name kvs]
  `(def ~name ~(s/keys :req ~@(keys kvs))))
 
-(defn def-key-specs [kvs]
-  (for [[k v] kvs] `(s/def ~k ~v)))
+(defn def-keyword-specs [kw-specs]
+  (for [[kw spec] kw-specs] `(s/def ~kw ~spec)))
 
-(defmacro defschema [name & {:as kvs}]
- (list* `do
-   (def-map-spec name kvs)
-   (def-key-specs kvs)))
+(defmacro defspecs [& {:as kw-specs}]
+ `(do (def-keyword-specs ~kw-specs)))
 
-; Target syntax
+(defmacro defschema [name & {:as kw-specs}]
+ `(do
+    ~(def-map-spec name kw-specs)
+    ~(def-keyword-specs kw-specs)))
+
+
+
+; Usage
 (defschema person
   ::name string?
   ::age int?)
+
+(defspecs
+  :dog/name string?
+  :dog/breed string?
+  :dog/dog (s/keys :req [:dog/name :dog/breed]))
