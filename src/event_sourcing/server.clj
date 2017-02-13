@@ -4,14 +4,14 @@
             [ring.middleware.json :as middleware]))
 
 
-(defmulti transition :event-sourcing.event/type)
+(defmulti transition-entities :event-sourcing.event/type)
 
 (defn initial-state []
   (atom {:events []
          :entities []}))
 
 (defn replay [events]
-  (reduce transition (initial-state) events))
+  (reduce transition-entities (initial-state) events))
 
 
 ; ---
@@ -23,9 +23,9 @@
   (GET "/events" []
     (@state :events))
   (POST "/" {event :params}
-    (swap! state #(transition % event))))
+    (swap! state #(transition-entities % event))))
 
 
-(run-server (-> event-routes
-                (middleware/wrap-json-body {:keywords? true})
-                (middleware/wrap-json-response)))
+; (run-server (-> event-routes
+;                 (middleware/wrap-json-body {:keywords? true})
+;                 (middleware/wrap-json-response)))
