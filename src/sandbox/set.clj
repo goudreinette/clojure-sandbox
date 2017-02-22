@@ -17,14 +17,15 @@
                      #:personality{:id 2 :name "skittisch"}})
 
 (defn infer-join-key [key]
-  (keyword (str key) "id"))
+  (keyword (name key) "id"))
 
 
 (defn hydrate-with [strategy xrel yrel target-key]
   (let [join-key (infer-join-key target-key)]
+    (println join-key)
     (for [tuple xrel]
       (assoc tuple target-key
-        (strategy #(matches? % {:personality/id  (tuple :personality/id )}) yrel)))))
+        (strategy #(matches? % {join-key (tuple join-key )}) yrel)))))
 
 (def hydrate (partial hydrate-with (comp first set/select)))
 (def hydrate-all (partial hydrate-with set/select))
