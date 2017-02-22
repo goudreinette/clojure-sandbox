@@ -8,4 +8,5 @@
 (defn where [set query]
   (set/select #(matches? % query) set))
 
+
 (def insert conj)
