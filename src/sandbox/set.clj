@@ -6,30 +6,19 @@
   (= (select-keys tuple (keys query))
      query))
 
-(defn where [set query]
+(defn select-matching [set query]
   (set/select #(matches? % query) set))
 
-(def animals #{#:animal{:id 1 :name "betsy" :owner "brian" :kind "cow" :personality/id 1}
-               #:animal{:id 2 :name "jake"  :owner "brian" :kind "horse" :personality/id 2}
-               #:animal{:id 3 :name "josie" :owner "dawn"  :kind "cow" :personality/id 1}})
-
-(def personalities #{#:personality{:id 1 :name "stoic"}
-                     #:personality{:id 2 :name "skittisch"}})
 
 (defn infer-join-key [key]
   (keyword (name key) "id"))
 
 
-(defn hydrate-with [strategy xrel yrel target-key]
-  (let [join-key (infer-join-key target-key)]
-    (println join-key)
-    (for [tuple xrel]
-      (assoc tuple target-key
-        (strategy #(matches? % {join-key (tuple join-key )}) yrel)))))
+(defn hydrate-all
+  ([xrel yrel target-key]
+   (hydrate-all xrel yrel target-key (infer-join-key target-key)))
 
-(def hydrate (partial hydrate-with (comp first set/select)))
-(def hydrate-all (partial hydrate-with set/select))
-
-
-
-(def insert conj)
+  ([xrel yrel target-key join-key]
+   (for [tuple xrel]
+     (assoc tuple target-key
+       (select-matching yrel {join-key (tuple join-key)})))))
