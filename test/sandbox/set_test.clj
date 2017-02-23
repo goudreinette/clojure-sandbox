@@ -3,7 +3,8 @@
 
 (def person {:person/name "Hans" :person/age 19  :pet/name "Lieuwe"})
 (def people #{person})
-(def pets #{{:pet/name "Lieuwe" :pet/kind "dog"}})
+(def pet {:pet/name "Lieuwe" :pet/kind "dog"})
+(def pets #{pet})
 
 
 (def animals #{#:animal{:id 1 :name "betsy" :owner "brian" :kind "cow" :personality/id 1}
@@ -22,7 +23,4 @@
   (select-matching people {:person/age 21}) => #{})
 
 (facts "hydrate"
-  (first (hydrate-all animals personalities :personality)) =>
-    (contains {:personality #{#:personality{:id 1 :name "stoic"}}})
-  (first (hydrate-all people pets :pet :pet/name)) =>
-    (contains {:pet #{#:pet{:kind "dog" :name "Lieuwe"}}}))
+  (hydrate person pets :pet :join-on :pet/name) => (contains {:pet pet}))
