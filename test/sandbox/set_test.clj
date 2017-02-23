@@ -23,4 +23,4 @@
   (select-matching people {:person/age 21}) => #{})
 
 (facts "hydrate"
-  (hydrate person pets :pet :join-on :pet/name) => (contains {:pet pet}))
+  (hydrate person pets :pet :pet/name) => (contains {:pet pet}))

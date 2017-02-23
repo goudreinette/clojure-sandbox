@@ -7,16 +7,15 @@
                           (set tuple))))
 
 
-
 (defn select-matching [set query]
   (set/select #(matches? % query) set))
 
 
 (defn infer-join-key [key]
   (keyword (name key) "id"))
-  
 
-(defn hydrate-with [f tuple yrel target-key & {:keys [join-on]}]
+
+(defn hydrate-with [f tuple yrel target-key & [join-on]]
   (let [join-key (or join-on (infer-join-key target-key))]
     (assoc tuple target-key
       (f (select-matching yrel {join-key (tuple join-key)})))))
