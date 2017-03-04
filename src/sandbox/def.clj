@@ -1,4 +1,4 @@
-(ns sandbox.macros)
+(ns sandbox.def)
 
 
 (defmacro def-watched [name & value]
