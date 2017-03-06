@@ -2,14 +2,10 @@
 
 
 
-(defn make-method [multifn dispatch-value args & body]
-  `(defmethod ~multifn ~dispatch-value [~@args]
-     ~@body))
-
-(defmacro defmethods [multi-fn args & {:as methods}]
+(defmacro defmethods [multifn args & {:as methods}]
  `(do ~@(for [[dispatch-value body] methods]
-           (make-method multi-fn dispatch-value args body))))
-
+           `(defmethod ~multifn ~dispatch-value [~@args]
+              ~@body))))
 
 ; Demo
 (defmulti handle
