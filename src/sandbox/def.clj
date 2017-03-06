@@ -8,7 +8,21 @@
      (fn [key# r# old# new#]
       (println old# "->" new#)))))
 
+(defn def-sym [f-sym]
+  (symbol (str "def" (name f-sym))))
 
-(defmacro defdef [fn-sym]
-  `(defmacro ~(symbol (str "def" fn-sym)) [name# & args#]
-     (def plus1 (apply ~fn-sym args#))))
+(defn intern-application-result [f name args]
+  (intern *ns* name (apply f args)))
+
+(defn make-def-macro [f-sym]
+ `(defmacro ~(def-sym f-sym) [name# & args#]
+    (intern-application-result ~f-sym name# (map eval args#))))
+
+(defmacro defmacro-for [f]
+  (make-def-macro f))
+
+
+; Test
+(defmacro-for partial)
+
+(defpartial plus5 + 5)
