@@ -8,6 +8,7 @@
      (fn [key# r# old# new#]
       (println old# "->" new#)))))
 
+
 (defn def-sym [f-sym]
   (symbol (str "def" (name f-sym))))
 
@@ -20,9 +21,3 @@
 
 (defmacro defmacro-for [f]
   (make-def-macro f))
-
-
-; Test
-(defmacro-for partial)
-
-(defpartial plus5 + 5)
