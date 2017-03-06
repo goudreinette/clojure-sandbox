@@ -3,6 +3,7 @@
 
 (defmacro-for partial)
 (defmacro-for comp)
+
 (defpartial plus3 + 3)
 (defcomp plus6 plus3 plus3)
 
