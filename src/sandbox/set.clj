@@ -3,8 +3,8 @@
             [sandbox.control-flow :refer [le]]))
 
 (defn matches? [tuple query]
-  (empty? (set/difference (set query)
-                          (set tuple))))
+  (set/superset? (set tuple)
+                 (set query)))
 
 
 (defn select-matching [set query]
