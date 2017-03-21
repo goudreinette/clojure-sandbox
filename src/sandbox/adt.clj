@@ -84,7 +84,6 @@
   (let [{:keys [tag slots] {:keys [tag-names]} :adt} (eval expr)
          clauses (tags-to-string clauses)
          matchform (vector tag (vec (vals slots)))]  
-
     (throw-unless (= (tags-in-clauses clauses) tag-names)  
                   (differences tag-names clauses))
     `(match ~matchform
