@@ -49,9 +49,9 @@
 
 
 
-(defn- different-cases [expr clauses]
+(defn- different-cases [tag-names clauses]
   (let [in-clauses (set (map (comp first first) (partition 2 clauses)))
-        declared   (set (:tag-names (:adt expr)))
+        declared   (set tag-names)
         missing    (set/difference declared in-clauses)
         undefined  (set/difference in-clauses declared)]  
    (str (when (not-empty missing) 
@@ -70,11 +70,11 @@
                               
 
 (defmacro case-of [expr & clauses]
-  (let [{:as expr {:keys [tag-names]} :adt :keys [tag]} (eval expr)
+  (let [{:keys [tag slots] {:keys [tag-names]} :adt} (eval expr)
          clauses (tags-to-string clauses)
-         matchform (vector (:tag expr) (vec (vals (:slots expr))))]   
+         matchform (vector tag (vec (vals slots)))]   
     (if (not= (tags-in-clauses clauses) tag-names) 
-       (throw (Error. (different-cases expr clauses)))
+       (throw (Error. (different-cases tag-names clauses)))
       `(match ~matchform
           ~@clauses)))) 
 
@@ -90,7 +90,7 @@
 (defn test- []
   (case-of (->Registered 1)
     [Anonymous] "anon"
-    [Hello id] id))
+    [Registered id] id))
 
 
 
