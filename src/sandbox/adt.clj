@@ -41,15 +41,25 @@
  [name & tags]
  (data-impl name tags))
 
+(defn tags-to-string [clauses]
+  (apply concat
+    (for [[[tag slots] then] (partition 2 clauses)]
+      [[(str tag) (quote slots)] then])))
+
+
+
 (defn- missing-cases [expr clauses]
   (set/difference (set (:tag-names (:adt expr)))
                   (set (map (comp first first) (partition 2 clauses))))) 
 
 (defmacro case-of [expr & clauses]
-  (let [{:as expr {:keys [tag-names]} :adt :keys [tag]} (eval expr)]
+  (let [{:as expr {:keys [tag-names]} :adt :keys [tag]} (eval expr)
+         clauses (tags-to-string clauses)
+         matchform (vec (list* (:tag expr) (vals (:slots expr))))]   
+    (println matchform)
     (if (< (/ (count clauses) 2) (count tag-names)) 
        (throw (Error. (str "Missing cases: " (string/join ", " (missing-cases expr clauses)))))
-      `(match [~(:tag expr) ~(:slots expr)]
+      `(match ~matchform
           ~@clauses)))) 
 
 
@@ -58,9 +68,10 @@
   Anonymous
   (Registered id))
 
+
 (defn test- []
   (case-of (->Registered 1)
-    ["Anonymous" {}] "anon"))
-    ; ["Registered" {:id id}] (str "regis " id)))
+    [Anonymous] "anon"
+    [Registered 1] "regis "))
 
 
