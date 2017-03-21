@@ -1,6 +1,7 @@
 (ns sandbox.adt
-  (:require [clojure.core.match :refer [match]]))
-
+  (:require [clojure.core.match :refer [match]]
+            [clojure.string :as string]
+            [clojure.set :as set]))
 
 (defn adt [name tag-names]
   {:name (str name) 
@@ -11,8 +12,9 @@
 
 (defn define-tag [adt name slots]
  `(defn ~(symbol (str  "->" name)) [& vals#]
-    {:slots (zipmap ~(vec (map str slots)) vals#) 
-     :adt ~adt}))   
+    {:slots (zipmap ~(vec (map keyword slots)) vals#) 
+     :adt ~adt
+     :tag ~(str name)}))   
 
 
 (defn tag-name [tag]
@@ -39,17 +41,26 @@
  [name & tags]
  (data-impl name tags))
 
-; (defn- missing-cases [adt & clauses]
-;   ())
+(defn- missing-cases [expr clauses]
+  (set/difference (set (:tag-names (:adt expr)))
+                  (set (map (comp first first) (partition 2 clauses))))) 
 
-; (defmacro match-adt [adt expr & clauses]
-;   (if (< clauses (count (:tags adt)))
-;     (println "Missing cases" (missing-cases adt clauses))
-;     ()))
+(defmacro case-of [expr & clauses]
+  (let [{:as expr {:keys [tag-names]} :adt :keys [tag]} (eval expr)]
+    (if (< (/ (count clauses) 2) (count tag-names)) 
+       (throw (Error. (str "Missing cases: " (string/join ", " (missing-cases expr clauses)))))
+      `(match [~(:tag expr) ~(:slots expr)]
+          ~@clauses)))) 
 
 
+; Demo
 (data UserId
   Anonymous
   (Registered id))
+
+(defn test- []
+  (case-of (->Registered 1)
+    ["Anonymous" {}] "anon"))
+    ; ["Registered" {:id id}] (str "regis " id)))
 
 
