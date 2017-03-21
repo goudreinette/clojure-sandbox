@@ -38,7 +38,7 @@
 
 
 
-(defmacro data 
+(defmacro defdata 
  "Define a new ADT"
  [name & tags]
  (data-impl name tags))
@@ -91,11 +91,9 @@
 
 
 ; Demo
-(data UserId
+(defdata UserId
   Anonymous
   (Registered id))
-
-
 
 
 (defn test- []
