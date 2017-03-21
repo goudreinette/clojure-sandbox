@@ -2,6 +2,7 @@
   (:require [clojure.core.match :refer [match]]
             [clojure.string :as string]
             [clojure.set :as set]))
+          
 
 (defn adt [name tag-names]
   {:name (str name) 
@@ -56,7 +57,6 @@
   (let [{:as expr {:keys [tag-names]} :adt :keys [tag]} (eval expr)
          clauses (tags-to-string clauses)
          matchform (vector (:tag expr) (vec (vals (:slots expr))))]   
-    (println clauses)
     (if (< (/ (count clauses) 2) (count tag-names)) 
        (throw (Error. (str "Missing cases: " (string/join ", " (missing-cases expr clauses)))))
       `(match ~matchform
