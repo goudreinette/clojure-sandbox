@@ -1,7 +1,8 @@
 (ns sandbox.adt
   (:require [clojure.core.match :refer [match]]
             [clojure.string :as string]
-            [clojure.set :as set]))
+            [clojure.set :as set]
+            [sandbox.control-flow :refer [unless]]))
           
 
 (defn adt [name tag-names]
@@ -54,7 +55,7 @@
            (list 'when pred form))))
 
 
-(defn- different-cases [tag-names clauses]
+(defn- differences [tag-names clauses]
   (let [in-clauses (set (map (comp first first) (partition 2 clauses)))
         declared   (set tag-names)
         missing    (set/difference declared in-clauses)
@@ -69,6 +70,10 @@
       (not-empty undefined) 
       (str "Undefined: " (string/join ", " undefined)))))
 
+(defmacro throw-unless [pred message]
+ `(unless ~pred
+    (throw (Error. ~message))))    
+
 
 (defn tags-in-clauses [clauses]
   (for [[[tag & _]] (partition 2 clauses)]
@@ -78,11 +83,12 @@
 (defmacro case-of [expr & clauses]
   (let [{:keys [tag slots] {:keys [tag-names]} :adt} (eval expr)
          clauses (tags-to-string clauses)
-         matchform (vector tag (vec (vals slots)))]   
-    (if (not= (tags-in-clauses clauses) tag-names) 
-       (throw (Error. (different-cases tag-names clauses)))
-      `(match ~matchform
-          ~@clauses)))) 
+         matchform (vector tag (vec (vals slots)))]  
+
+    (throw-unless (= (tags-in-clauses clauses) tag-names)  
+                  (differences tag-names clauses))
+    `(match ~matchform
+        ~@clauses))) 
 
 
 ; Demo
