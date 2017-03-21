@@ -11,3 +11,5 @@
 
 (defmacro defconstrained [contract name args & body]
   `(def ~name (~contract (fn [~@args] ~@body))))
+
+
