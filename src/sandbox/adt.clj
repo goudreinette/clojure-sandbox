@@ -49,19 +49,25 @@
 
 
 
+(defmacro when-message [& pred-form-pairs]
+ `(str ~@(for [[pred form] (partition 2 pred-form-pairs)]
+           (list 'when pred form))))
+
+
 (defn- different-cases [tag-names clauses]
   (let [in-clauses (set (map (comp first first) (partition 2 clauses)))
         declared   (set tag-names)
         missing    (set/difference declared in-clauses)
         undefined  (set/difference in-clauses declared)]  
-   (str (when (not-empty missing) 
-          (str "Missing: " (string/join ", " missing)))
-
-        (when (and (not-empty missing) (not-empty undefined))
-           ", ")
-        
-        (when (not-empty undefined) 
-          (str "Undefined: " (string/join ", " undefined))))))
+   (when-message 
+      (not-empty missing) 
+      (str "Missing: " (string/join ", " missing))
+      
+      (and (not-empty missing) (not-empty undefined)) 
+      ", "
+    
+      (not-empty undefined) 
+      (str "Undefined: " (string/join ", " undefined)))))
 
 
 (defn tags-in-clauses [clauses]
