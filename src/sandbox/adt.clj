@@ -2,7 +2,7 @@
   (:require [clojure.core.match :refer [match]]
             [clojure.string :as string]
             [clojure.set :as set]
-            [sandbox.control-flow :refer [unless ensure]]))
+            [sandbox.control-flow :refer [unless ensure when-message]]))
           
 
 (defn adt [name tag-names]
@@ -49,13 +49,6 @@
       [(vector (str tag) (vec slots)) then])))
 
 
-
-(defmacro when-message [& pred-form-pairs]
- `(string/join ", "
-    (remove nil?
-     ~(vec 
-        (for [[pred form] (partition 2 pred-form-pairs)]
-          (list 'when pred form))))))
 
 
 (defn- differences [tag-names clauses]

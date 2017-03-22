@@ -58,6 +58,17 @@
         (do ~@body))))
 
 
+(defmacro when-message 
+  "Produce a concatenation of messages whose predicate is true"
+  [& pred-form-pairs]
+ `(string/join ", "
+    (remove nil?
+     ~(vec 
+        (for [[pred form] (partition 2 pred-form-pairs)]
+          (list 'when pred form))))))
+
+
+
 (defmacro ensure 
   "Assert without AssertionError"
   [pred message]
