@@ -56,3 +56,10 @@
   `(let [~'it ~expr]
       (if ~'it
         (do ~@body))))
+
+
+(defmacro ensure 
+  "Assert without AssertionError"
+  [pred message]
+ `(unless ~pred
+    (throw (Error. ~message))))    

@@ -2,7 +2,7 @@
   (:require [clojure.core.match :refer [match]]
             [clojure.string :as string]
             [clojure.set :as set]
-            [sandbox.control-flow :refer [unless]]))
+            [sandbox.control-flow :refer [unless ensure]]))
           
 
 (defn adt [name tag-names]
@@ -70,9 +70,7 @@
       (not-empty undefined) 
       (str "Undefined: " (string/join ", " undefined)))))
 
-(defmacro ensure [pred message]
- `(unless ~pred
-    (throw (Error. ~message))))    
+
 
 
 (defn tags-in-clauses [clauses]
