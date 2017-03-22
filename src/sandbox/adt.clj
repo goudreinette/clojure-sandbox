@@ -51,8 +51,11 @@
 
 
 (defmacro when-message [& pred-form-pairs]
- `(str ~@(for [[pred form] (partition 2 pred-form-pairs)]
-           (list 'when pred form))))
+ `(string/join ", "
+    (remove nil?
+     ~(vec 
+        (for [[pred form] (partition 2 pred-form-pairs)]
+          (list 'when pred form))))))
 
 
 (defn- differences [tag-names clauses]
@@ -63,14 +66,11 @@
    (when-message 
       (not-empty missing) 
       (str "Missing: " (string/join ", " missing))
-      
-      (and (not-empty missing) (not-empty undefined)) 
-      ", "
-    
+
       (not-empty undefined) 
       (str "Undefined: " (string/join ", " undefined)))))
 
-(defmacro throw-unless [pred message]
+(defmacro ensure [pred message]
  `(unless ~pred
     (throw (Error. ~message))))    
 
@@ -84,8 +84,8 @@
   (let [{:keys [tag slots] {:keys [tag-names]} :adt} (eval expr)
          clauses (tags-to-string clauses)
          matchform (vector tag (vec (vals slots)))]  
-    (throw-unless (= (tags-in-clauses clauses) tag-names)  
-                  (differences tag-names clauses))
+    (ensure (= (tags-in-clauses clauses) tag-names)  
+            (differences tag-names clauses))
     `(match ~matchform
         ~@clauses))) 
 
@@ -94,6 +94,7 @@
 (defdata UserId
   Anonymous
   (Registered id))
+
 
 
 (defn test- []
