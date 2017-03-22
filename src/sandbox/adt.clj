@@ -10,13 +10,17 @@
    :tag-names (vec (map str tag-names))})
 
 
+(defn tag-constructor [adt name slots]
+  (fn [& vals]
+    {:slots (zipmap (vec (map keyword slots)) vals) 
+     :adt adt
+     :tag (str name)}))
 
 
 (defn define-tag [adt name slots]
- `(defn ~(symbol (str  "->" name)) [& vals#]
-    {:slots (zipmap ~(vec (map keyword slots)) vals#) 
-     :adt ~adt
-     :tag ~(str name)}))   
+ `(def ~(symbol (str  "->" name)) 
+       ~(tag-constructor adt name slots)))
+       
 
 
 (defn tag-name [tag]
