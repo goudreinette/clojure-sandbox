@@ -74,3 +74,11 @@
   [pred message]
  `(unless ~pred
     (throw (Error. ~message))))    
+
+
+(defmacro ensure->describe
+  "Evaluates predicate and descriptor with value. 
+   When predicate fails, uses error message produced by descriptor."
+  [val pred descriptor]
+ `(ensure (pred val)
+          (descriptor val)))

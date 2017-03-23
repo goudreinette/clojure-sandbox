@@ -59,7 +59,7 @@
            
 
 
-(defn- show-difference [declared in-clauses]
+(defn- describe-difference [declared in-clauses]
   (let [[missing undefined _] (diff declared in-clauses)] 
    (when-message 
       (not-empty missing) 
@@ -78,7 +78,7 @@
          in-clauses (tags-in-clauses clauses)
          matchform  [tag (vec (vals slots))]]  
     (ensure (= in-clauses tag-names)  
-            (show-difference tag-names in-clauses))
+            (describe-difference tag-names in-clauses))
     `(match ~matchform
         ~@clauses))) 
 
