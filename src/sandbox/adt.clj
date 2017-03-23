@@ -1,8 +1,7 @@
 (ns sandbox.adt
   (:use com.rpl.specter clojure.data)
   (:require [clojure.core.match :refer [match]]
-            [clojure.string :as string :refer [join]]
-            [clojure.set :as set]
+            [clojure.string :refer [join]]
             [sandbox.control-flow :refer [unless ensure when-message]]))
 
 
@@ -92,9 +91,9 @@
 
 
 (defn test- []
-  (case-of (->Registered 1)
-    [Anonymous] "anon"
-    [Registered id] id))
+  (case-of (->Anonymous 1)
+    (Anonymous) "anon"
+    (Registered id) id))
 
 
 
