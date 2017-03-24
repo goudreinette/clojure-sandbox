@@ -10,10 +10,9 @@
 
 
 (defn test- []
-  (case-of (Anonymous 1)
+  (case-of (Registered 1)
     Anonymous "anon"
     (Registered id) id))
-
 
 
 

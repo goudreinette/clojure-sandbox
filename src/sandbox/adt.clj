@@ -73,11 +73,11 @@
 
 (defmacro case-of [quoted-val & clauses]
   "Pattern-match on a ADT value"
-  (let [{:keys [tag-name slots] {:keys [tag-names]} :adt} (eval quoted-val)
+  (let [{:keys [tag slots] {:keys [tag-names]} :adt} (eval quoted-val)
          clauses    (transform-clauses clauses)
-         in-clauses (tags-in-clauses clauses)]
-    (ensure-with-descriptor 
-      = describe-difference 
-      tag-names in-clauses)
-    `(match [~tag-name ~(vec (vals slots))]
+         in-clauses (tags-in-clauses clauses)
+         matchform  [tag (vec (vals slots))]]  
+    (println matchform)
+    (ensure-with-descriptor = describe-difference tag-names in-clauses)
+    `(match ~matchform
         ~@clauses)))
