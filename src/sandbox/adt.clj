@@ -2,65 +2,50 @@
   (:use com.rpl.specter clojure.data)
   (:require [clojure.core.match :refer [match]]
             [clojure.string :refer [join]]
-            [sandbox.control-flow :refer [unless ensure when-message]]))
+            [sandbox.control-flow :refer [unless ensure ensure-with-descriptor when-message]]))
 
 
-(defn tag-name [tag]
+(defn- tag-name [tag]
   (if (list? tag) (first tag) tag))
 
-(defn tag-slots [tag]
+(defn- tag-slots [tag]
   (if (list? tag) (rest tag) [])) 
 
-(defn adt [name tags]
+(defn- make-adt [name tags]
   {:name (str name) 
    :tag-names (vec (map (comp str tag-name) tags))})
 
 
-(defn tag-constructor [adt name slots]
+
+(defn- make-tag-constructor [adt name slots]
   (fn [& vals]
     {:slots (zipmap (vec (map keyword slots)) vals) 
      :adt adt
      :tag (str name)}))
 
 
-(defn define-tag [adt name slots]
+(defn- define-tag-constructor [adt name slots]
  `(def ~(symbol (str  "->" name)) 
-       ~(tag-constructor adt name slots)))
+       ~(make-tag-constructor adt name slots)))
        
 
-
-(defn- data-impl
-  [name tags]
- `(do 
-    ~@(for [tag tags]
-        (define-tag 
-          (adt name tags) 
-          (tag-name tag) 
-          (tag-slots tag))))) 
-
-
-
-
-
-(defmacro defdata 
- "Define a new ADT"
- [name & tags]
- (data-impl name tags))
-
-(defn transform-clauses [clauses]
+(defn- transform-clauses [clauses]
   (apply concat
-    (for [[[tag & slots] then] (partition 2 clauses)]
-      [[(str tag) (vec slots)] then])))
+    (for [[tag then] (partition 2 clauses)
+          :let [name  (tag-name tag)  
+                slots (tag-slots tag)]] 
+      [[(str name) (vec slots)] then])))
 
 
-(defn tags-in-clauses [clauses]
+(defn- tags-in-clauses [clauses]
   (for [[[tag & _]] (partition 2 clauses)]
     tag))
            
 
 
+
 (defn- describe-difference [declared in-clauses]
-  (let [[missing undefined _] (diff declared in-clauses)] 
+  (let [[missing undefined _] (diff (set declared) (set in-clauses))] 
    (when-message 
       (not-empty missing) 
       (str "Missing: " (join ", " missing))
@@ -69,34 +54,24 @@
       (str "Undefined: " (join ", " undefined)))))
 
 
-                   
 
+(defmacro defdata 
+ "Define a new ADT"
+ [name & tags]
+ `(do 
+    ~@(for [tag tags]
+        (define-tag-constructor 
+          (make-adt name tags) 
+          (tag-name tag) 
+          (tag-slots tag))))) 
 
-(defmacro case-of [expr & clauses]
-  (let [{:keys [tag slots] {:keys [tag-names]} :adt} (eval expr)
+(defmacro case-of [quoted-val & clauses]
+  "Pattern-match on a ADT value"
+  (let [{:keys [tag-name slots] {:keys [tag-names]} :adt} (eval quoted-val)
          clauses    (transform-clauses clauses)
-         in-clauses (tags-in-clauses clauses)
-         matchform  [tag (vec (vals slots))]]  
-    (ensure (= in-clauses tag-names)  
-            (describe-difference tag-names in-clauses))
-    `(match ~matchform
-        ~@clauses))) 
-
-
-; Demo
-(defdata UserId
-  Anonymous
-  (Registered id))
-
-
-
-(defn test- []
-  (case-of (->Anonymous 1)
-    (Anonymous) "anon"
-    (Registered id) id))
-
-
-
-
-
-
+         in-clauses (tags-in-clauses clauses)]
+    (ensure-with-descriptor 
+      = describe-difference 
+      tag-names in-clauses)
+    `(match [~tag-name ~(vec (vals slots))]
+        ~@clauses)))

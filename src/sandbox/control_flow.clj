@@ -1,4 +1,5 @@
-(ns sandbox.control-flow)
+(ns sandbox.control-flow
+  (:require [clojure.string :refer [join]]))
 
 (defn- insert-v [v [condition result]]
   (list
@@ -35,7 +36,6 @@
       (recur))))
 
 
-
 (defmacro le
   "Single let"
   [name value & body]
@@ -61,7 +61,7 @@
 (defmacro when-message 
   "Produce a concatenation of messages whose predicate is true"
   [& pred-form-pairs]
- `(string/join ", "
+ `(join ", "
     (remove nil?
      ~(vec 
         (for [[pred form] (partition 2 pred-form-pairs)]
@@ -69,16 +69,15 @@
 
 
 
-(defmacro ensure 
+(defn ensure 
   "Assert without AssertionError"
   [pred message]
- `(unless ~pred
-    (throw (Error. ~message))))    
+  (unless pred
+    (throw (Error. message))))    
 
-
-(defmacro ensure->describe
-  "Evaluates predicate and descriptor with value. 
-   When predicate fails, uses error message produced by descriptor."
-  [val pred descriptor]
- `(ensure (pred val)
-          (descriptor val)))
+(defn ensure-with-descriptor
+ "Evaluates predicate and descriptor with value. 
+  When predicate fails, uses error message produced by descriptor."
+  [pred descriptor & vals]
+  (ensure (apply pred vals)
+          (apply descriptor vals)))
