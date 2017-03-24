@@ -16,16 +16,21 @@
    :tag-names (vec (map (comp str tag-name) tags))})
 
 
+(defn- describe-slots-count [expected got]
+  (str "Wrong number of args: " expected " slots, " got " args ")) 
+
 
 (defn- make-tag-constructor [adt name slots]
   (fn [& vals]
+    (ensure-with-descriptor = describe-slots-count (count slots) (count vals))
     {:slots (zipmap (vec (map keyword slots)) vals) 
      :adt adt
      :tag (str name)}))
 
 
+
 (defn- define-tag-constructor [adt name slots]
- `(def ~(symbol (str  "->" name)) 
+ `(def ~(symbol name) 
        ~(make-tag-constructor adt name slots)))
        
 
@@ -35,6 +40,7 @@
           :let [name  (tag-name tag)  
                 slots (tag-slots tag)]] 
       [[(str name) (vec slots)] then])))
+
 
 
 (defn- tags-in-clauses [clauses]
