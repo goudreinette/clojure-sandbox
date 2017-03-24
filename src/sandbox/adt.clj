@@ -1,8 +1,8 @@
 (ns sandbox.adt
-  (:use com.rpl.specter clojure.data)
+  (:use clojure.data)
   (:require [clojure.core.match :refer [match]]
             [clojure.string :refer [join]]
-            [sandbox.control-flow :refer [unless ensure ensure-with-descriptor when-message]]))
+            [sandbox.control-flow :refer [unless ensure-with-descriptor when-message]]))
 
 
 (defn- tag-name [tag]
@@ -28,7 +28,6 @@
      :tag (str name)}))
 
 
-
 (defn- define-tag-constructor [adt name slots]
  `(def ~(symbol name) 
        ~(make-tag-constructor adt name slots)))
@@ -42,12 +41,9 @@
       [[(str name) (vec slots)] then])))
 
 
-
 (defn- tags-in-clauses [clauses]
   (for [[[tag & _]] (partition 2 clauses)]
     tag))
-           
-
 
 
 (defn- describe-difference [declared in-clauses]
@@ -58,7 +54,6 @@
 
       (not-empty undefined) 
       (str "Undefined: " (join ", " undefined)))))
-
 
 
 (defmacro defdata 
@@ -77,7 +72,6 @@
          clauses    (transform-clauses clauses)
          in-clauses (tags-in-clauses clauses)
          matchform  [tag (vec (vals slots))]]  
-    (println matchform)
     (ensure-with-descriptor = describe-difference tag-names in-clauses)
     `(match ~matchform
         ~@clauses)))
