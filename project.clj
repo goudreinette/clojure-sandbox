@@ -9,7 +9,8 @@
      [http-kit "2.3.0-alpha1"]
      [prismatic/schema "1.1.3"]
      [com.rpl/specter "1.0.0"]
-     [proto-repl "0.3.1"]]
+     [proto-repl "0.3.1"]
+     [overtone "0.10.1"]]
   :profiles {:uberjar {:aot :all}
              :dev {:source-paths ["src" "test"]
                    :dependencies [[midje "1.9.0-alpha6"]]}})
