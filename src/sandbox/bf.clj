@@ -1,10 +1,8 @@
 (ns sandbox.bf
-  (:require [instaparse.core :refer [defparser]]))
+  (:require [instaparse.core :refer [defparser]]
+            [sandbox.multi :refer [defmethods]]))
 
 (declare bf-eval)
-
-(def memory (atom (vec (repeat 20 0))))
-(def pointer (atom 0))
 
 
 (defparser bf-parser
@@ -21,38 +19,49 @@
    write = '.'"
   :auto-whitespace :standard)
 
-(defn update-pointer [f]
-  (swap! pointer f))
+(defmulti bf-eval first)
 
-(defn current-byte []
-  (@memory @pointer))
 
-(defn update-byte [f]
-  (swap! memory update @pointer f))
 
-(defn read-byte []
-  (swap! memory update @pointer (constantly (read))))
+(defn update-pointer [[memory pointer] +-]
+  [memory (+- pointer)])
 
-(defn write-byte []
-  (print (char (current-byte))))
+(defn current-byte [[memory pointer]]
+  (memory pointer))
 
-(defn bf-loop [ops]
-  (when-not (= 0 (current-byte))
-    (doseq [op ops]
-      (bf-eval op))
-    (bf-loop ops)))
+(defn update-byte [[memory pointer] +-]
+  [(update memory pointer +-) pointer])
 
-(defn bf-eval [form]
-  (case (first form)
-    :inc-byte (update-byte inc)
-    :dec-byte (update-byte dec)
-    :inc-pointer (update-pointer inc)
-    :dec-pointer (update-pointer dec)
-    :read (read-byte)
-    :write (write-byte)
-    :loop (bf-loop (rest form))
-    (doseq [f (rest form)]
-      (bf-eval f))))
+(defn read-byte [[memory pointer]]
+  [(update memory pointer (constantly (read)))])
+
+(defn write-byte [[memory pointer :as state]]
+  (print (current-byte state))
+  state)
+
+(defn bf-loop [state ops]
+  (if (= 0 (current-byte state))
+    state
+    (reduce bf-eval state ops)))
+
+(defmethods bf-eval [[memory pointer] op]
+  :inc-byte
+  (update-byte state inc)
+  :dec-byte
+  (update-byte state dec)
+  :inc-pointer
+  (update-pointer state inc)
+  :dec-pointer
+  (update-pointer state dec)
+  :read
+  (read-byte state)
+  :write
+  (write-byte state)
+  :loop
+  (bf-loop state (rest op)))
+
+
+(def init-state [(vec (repeat 20 0)) 0])
 
 (defn bf [program-string]
-  (bf-eval (bf-parser program-string)))
+  (reduce bf-eval init-state (bf-parser program-string)))

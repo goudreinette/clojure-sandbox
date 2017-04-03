@@ -12,4 +12,5 @@
    [instaparse "1.4.5"]]
   :profiles {:uberjar {:aot :all}
              :dev     {:source-paths ["src" "test"]
-                       :dependencies [[midje "1.9.0-alpha6"]]}})
+                       :dependencies [[midje "1.9.0-alpha6"]
+                                      [org.clojure/test.check "0.9.0"]]}})
