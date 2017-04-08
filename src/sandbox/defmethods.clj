@@ -1,9 +1,9 @@
-(ns sandbox.multi)
+(ns sandbox.defmethods)
 
 
 
 (defmacro defmethods [multifn args & {:as methods}]
- `(do ~@(for [[dispatch-value body] methods]
+  `(do ~@(for [[dispatch-value body] methods]
            `(defmethod ~multifn ~dispatch-value [~@args]
               ~@body))))
 
@@ -14,8 +14,8 @@
 
 (defmethods handle [event]
   :todo/add
-    (println "Adding a todo")
+  (println "Adding a todo")
   :todo/remove
-    (println "Removing a todo")
+  (println "Removing a todo")
   :default
-    (println "No handler for event"))
+  (println "No handler for event"))

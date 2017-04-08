@@ -1,4 +1,4 @@
-(defproject reinvdwoerd/sandbox "0.0.1-SNAPSHOT"
+(defproject reinvdwoerd/sandbox "SNAPSHOT"
   :description ""
   :dependencies
   [[org.clojure/clojure "1.9.0-alpha14"]

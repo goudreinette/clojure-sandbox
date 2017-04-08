@@ -1,7 +1,7 @@
 (ns sandbox.async-handling
   (:require [clojure.core.async :refer [>! <! chan >!! <!!]]
             [sandbox [async :refer :all]
-                     [multi :refer [defmethods]]]))
+                     [defmethods :refer [defmethods]]]))
 
 (def actions (chan))
 (defonce todos (atom []))

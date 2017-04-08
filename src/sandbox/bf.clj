@@ -1,6 +1,6 @@
 (ns sandbox.bf
   (:require [instaparse.core :refer [defparser]]
-            [sandbox.multi :refer [defmethods]]))
+            [sandbox.defmethods :refer [defmethods]]))
 
 (declare bf-eval)
 
