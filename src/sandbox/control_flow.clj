@@ -1,4 +1,5 @@
 (ns sandbox.control-flow
+  (:refer-clojure :exclude [ensure])
   (:require [clojure.string :refer [join]]))
 
 (defn- insert-v [v [condition result]]
@@ -30,17 +31,17 @@
 (defmacro do-while
   "A do-while loop"
   [test & body]
- `(loop []
-    ~@body
-    (when-not ~test
-      (recur))))
+  `(loop []
+     ~@body
+     (when-not ~test
+       (recur))))
 
 
 (defmacro le
   "Single let"
   [name value & body]
- `(let [~name ~value]
-    ~@body))
+  `(let [~name ~value]
+     ~@body))
 
 
 
@@ -54,30 +55,41 @@
   "Evaluates body with implicit 'it' when true"
   [expr & body]
   `(let [~'it ~expr]
-      (if ~'it
-        (do ~@body))))
+     (if ~'it
+       (do ~@body))))
 
 
-(defmacro when-message 
+(defmacro when-message
   "Produce a concatenation of messages whose predicate is true"
   [& pred-form-pairs]
- `(join ", "
-    (remove nil?
-     ~(vec 
-        (for [[pred form] (partition 2 pred-form-pairs)]
-          (list 'when pred form))))))
+  `(join ", "
+     (remove nil?
+       ~(vec
+          (for [[pred form] (partition 2 pred-form-pairs)]
+            (list 'when pred form))))))
 
 
 
-(defn ensure 
+(defn ensure
   "Assert without AssertionError"
   [pred message]
   (unless pred
-    (throw (Error. message))))    
+    (throw (Error. message))))
 
 (defn ensure-with-descriptor
- "Evaluates predicate and descriptor with value. 
-  When predicate fails, uses error message produced by descriptor."
+  "Evaluates predicate and descriptor with value.
+   When predicate fails, uses error message produced by descriptor."
   [pred descriptor & vals]
   (ensure (apply pred vals)
-          (apply descriptor vals)))
+    (apply descriptor vals)))
+
+
+(defn for-fold-impl [bindings body]
+  (let [[[acc-sym init-expr] [n-sym coll-expr]] (partition 2 bindings)]
+    `(reduce
+       (fn [~acc-sym ~n-sym] ~@body)
+       ~init-expr
+       ~coll-expr)))
+
+(defmacro for-fold [bindings & body]
+  (for-fold-impl bindings body))
