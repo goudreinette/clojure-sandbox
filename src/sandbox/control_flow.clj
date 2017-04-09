@@ -36,6 +36,12 @@
      (when-not ~test
        (recur))))
 
+(defmacro do-let [& args]
+  (let [body     (butlast args)
+        bindings (last args)]
+    `(let [~@bindings]
+       ~@body)))
+
 
 (defmacro le
   "Single let"
@@ -84,12 +90,12 @@
     (apply descriptor vals)))
 
 
-(defn for-fold-impl [bindings body]
-  (let [[[acc-sym init-expr] [n-sym coll-expr]] (partition 2 bindings)]
-    `(reduce
-       (fn [~acc-sym ~n-sym] ~@body)
-       ~init-expr
-       ~coll-expr)))
 
 (defmacro for-fold [bindings & body]
-  (for-fold-impl bindings body))
+  (let [[[acc-sym init-expr] & coll-bindings] (partition 2 bindings)
+        el-syms    (map first coll-bindings)
+        coll-exprs (map second coll-bindings)]
+    `(reduce
+       (fn [~acc-sym [~@el-syms]] ~@body)
+       ~init-expr
+       (map vector ~@coll-exprs))))
