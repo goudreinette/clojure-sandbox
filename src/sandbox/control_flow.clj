@@ -2,25 +2,23 @@
   (:refer-clojure :exclude [ensure])
   (:require [clojure.string :refer [join]]))
 
-(defn- insert-v [v [condition result]]
-  (list
-    (if (list? condition)
-      (list* (first condition) v (rest condition))
-      condition)
-    result))
+
+(defn- insert-expr [expr condition]
+  (if (list? condition)
+    (list* (first condition) expr (rest condition))
+    condition))
 
 
+(defn- expand-clauses [expr clauses]
+  (apply concat
+    (for [[condition result] (partition 2 clauses)]
+      [(insert-expr expr condition) result])))
 
-(defn- expand-clauses [v body]
-  (->> body
-    (partition 2)
-    (mapcat (partial insert-v v))))
 
 (defmacro condf
-  "Evaluates conditions with value threaded as first argument"
-  [v & forms]
-  `(cond ~@(expand-clauses v forms)))
-
+  "'cond', where expression is passed as first argument to conditions"
+  [expr & clauses]
+  `(cond ~@(expand-clauses expr clauses)))
 
 
 (defmacro unless
