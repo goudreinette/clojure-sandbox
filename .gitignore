@@ -4,3 +4,4 @@ db.edn
 .lein-*
 pom.xml*
 .idea
+/figwheel_server.log
