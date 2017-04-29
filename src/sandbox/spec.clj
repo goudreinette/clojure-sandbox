@@ -11,6 +11,6 @@
   "Define specs for a map and it's keys"
   [map-name & specs]
   `(defspecs
-     ~map-name (s/keys :req [~@(map first (partition 2 specs))])
+     ~map-name (s/keys :req-un [~@(map first (partition 2 specs))])
      ~@specs))
 

@@ -1,12 +1,12 @@
 (ns sandbox.def-test
   (:use midje.sweet sandbox.def))
 
-(defmacro-for partial)
-(defmacro-for comp)
+(defmacro<- partial)
+(defmacro<- defcompose comp)
 
 (defpartial plus3 + 3)
-(defcomp plus6 plus3 plus3)
+(defcompose plus6 plus3 plus3)
 
-(facts "about defmacro-for"
+(facts "about defmacro<-"
   (plus3 1) => 4
   (plus6 3) => 9)
