@@ -16,7 +16,8 @@
                  [egamble/let-else "1.0.7"]
                  [me.bsima/trello "0.3.0"]
                  [im.chit/hara.time "2.5.2"]
-                 [clj-time "0.13.0"]]
+                 [clj-time "0.13.0"]
+                 [enlive "1.1.6"]]
   :profiles {:uberjar {:aot :all}
              :dev     {:source-paths ["src" "test"]
                        :dependencies [[midje "1.9.0-alpha6"]
