@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="public/style.css">
+<script src="public/jquery-3.2.1.js"></script>
+<script src="public/moment.js"></script>
+<script src="public/knockout-3.4.2.js"></script>
+<script src="public/daterangepicker.js"></script>
+
+<div class="container">
+  <nav>
+    <input id="period" data-bind="daterangepicker: dateRange"/>
+    <select id="metric">
+      <option>Activities</option>
+      <option>Notes</option>
+    </select>
+  </nav>
+
+  <div id="chart">
+
+  </div>
+
+
+  <div id="actions">
+    <h3>Wednesday May 31</h3>
+    <div class="source">
+      <h5>Trello</h5>
+      <table>
+        <tbody>
+          <tr>
+            <td>10:00</td>
+            <td>moved card from list to list</td>
+            <td>card: Think</td>
+            <td>from: Today</td>
+            <td>to: Done</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<script src="public/main.js"></script>

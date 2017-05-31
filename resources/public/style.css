@@ -1,0 +1,87 @@
+@import url('./normalize.css');
+@import url('./skeleton.css');
+@import url('./daterangepicker.css');
+
+
+/**
+ * General
+*/
+* {
+    font-family: Concourse T3;
+}
+
+body {
+
+}
+
+select:focus, input:focus, textarea:focus {
+    border: none;
+}
+
+select:active, input:active, textarea:active {
+    border-top: 1px solid black !important;
+}
+
+.container {
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    margin-top: 50px;
+}
+
+
+/**
+ * Nav
+ */
+nav {
+    height: 50px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+}
+
+#metric, #period  {
+    height: 100%;
+    border: none;
+    font-size: 13px;
+    letter-spacing: .1rem;
+    color: #555;
+    padding: 0 20px;
+}
+
+#metric:hover, #period:hover  {
+}
+
+
+#period {
+    border-radius: 5px 0 0 0;
+    width: 200px;
+}
+
+#period:focus {
+    border-top: 1px solid black !important;
+}
+
+#metric {
+    border-radius: 0 5px 0 0;
+}
+
+
+/**
+ * Chart
+ */
+#chart {
+    height: 200px;
+    background: url('./img/tiny_grid.png');
+    border-bottom: 1px solid #eee;
+}
+
+
+/**
+ * Actions
+ */
+#actions {
+    padding: 20px;
+    margin: auto;
+    max-width: 600px;
+}

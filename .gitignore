@@ -5,3 +5,10 @@ db.edn
 pom.xml*
 .idea
 /figwheel_server.log
+resources/public/normalize.css
+resources/public/skeleton.css
+resources/public/daterangepicker.*
+resources/public/img/*
+jquery*.js
+knockout*.js
+moment.js
