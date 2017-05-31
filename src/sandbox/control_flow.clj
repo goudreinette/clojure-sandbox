@@ -99,3 +99,8 @@
        (fn [~acc-sym [~@el-syms]] ~@body)
        ~init-expr
        (map vector ~@coll-exprs))))
+
+(defmacro for-map [bindings & body]
+  `(apply merge
+    (for [~@bindings]
+        ~@body)))

@@ -20,4 +20,4 @@
 (facts "about defmapspec"
   (s/describe ::favorite-food) => 'string?
   (s/describe ::dog-age) => 'int?
-  (s/describe ::dog) => '(keys :req [::favorite-food ::dog-age]))
+  (s/describe ::dog) => '(keys :req-un [::favorite-food ::dog-age]))

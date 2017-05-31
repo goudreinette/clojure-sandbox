@@ -1,7 +1,7 @@
 (ns sandbox.multi-impl
  (:refer-clojure :exclude [defmethod defmulti]))
 
-(def methods (atom {}))
+(def multimethods (atom {}))
 
 
 (defn defmulti-impl [name dispatch-fn]
@@ -15,7 +15,7 @@
 (defmacro defmulti [name dispatch-fn]
   (swap! multimethods assoc name {})
  `(def ~name ~(defmulti-impl name (eval dispatch-fn))))
- 
+
 (defmacro defmethod [name dispatch-val params & body]
   (swap! multimethods assoc-in [name dispatch-val]
          (eval `(fn [~@params]

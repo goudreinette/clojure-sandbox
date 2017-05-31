@@ -12,9 +12,13 @@
              char        "hello world"]
     (update frequencies char (fnil inc 0))) => {\h 1, \e 1, \l 3, \o 2, \space 1, \w 1, \r 1, \d 1})
 
+(facts "for-map merges the resulting seq of maps"
+  (for-map [[k v] {:a 1 :b 2}
+            [k2 v2] {:c 3 :d 4}]
+    {k v k2 v2}) => {:a 1 :b 2 :c 3 :d 4})
+
 (facts "do-let is just let where the bindings come last"
   (do-let
     :ignore-me
     (+ a b)
     [a 1 b 2]) => 3)
-
