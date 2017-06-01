@@ -1,26 +1,42 @@
 (ns analytics.views
-  (:use net.cgrand.enlive-html clojure.pprint))
+  (:use hiccup.core))
 
 (def actions [{:date "10:00"
                :type "moved card from list to list"
                :entities {:card "Think" :from "Today" :to "Done"}}])
 
-(defsnippet action "source.html" [:tr] [{:keys [date type entities]}]
-  [:td.time] (content date) ; format here
-  [:td.type] (content type)
-  [:td.entity]
-  (clone-for [[k v] entities]
-    (content (str (name k) ": " v))))
+
+(defn action [{:keys [date type entities]}]
+  `[:tr.action
+    [:td.time ~date] ; format here
+    [:td.type ~type]
+    ~@(for [[k v] entities]
+       [:td.entity (str (name k) ": " v)])])
 
 
-(defsnippet source "source.html" [:.source] [source actions]
-  [:h5] (content source)
-  [:td.action] (content (map action actions)))
+(defn source [[name actions]]
+  [:div.source
+   [:h5 name]
+   [:table
+    [:tbody
+     (map action actions)]]])
 
 
-
-(deftemplate layout "index.html" [selected-date from to sources]
-  [:#selected-date] (content selected-date)
-  [:#actions :.source]
-  (clone-for [[s actions] sources]
-    (content (source s actions))))
+(defn view [selected-date from to sources]
+  [:html
+    [:head
+     [:link {:href "public/style.css", :rel "stylesheet"}]
+     [:script {:src "public/jquery-3.2.1.js"}]
+     [:script {:src "public/moment.js"}]
+     [:script {:src "public/knockout-3.4.2.js"}]
+     [:script {:src "public/daterangepicker.js"}]]
+    [:body
+     [:div.container
+      [:nav
+       [:input#period {:data-bind "daterangepicker: dateRange"}]
+       [:select#metric [:option "Activities"] [:option "Notes"]]]
+      [:div#chart]
+      [:div#actions
+       [:h3#selected-date selected-date]
+       (map source sources)]]
+     [:script {:src "public/main.js"}]]])
