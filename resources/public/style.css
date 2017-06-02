@@ -56,7 +56,7 @@ nav {
 }
 
 #period:focus {
-    border-top: 1px solid black !important;
+    border-top: 2px solid black !important;
 }
 
 
@@ -78,4 +78,39 @@ nav {
  */
 #actions {
     padding: 20px;
+}
+
+
+.source ul {
+    list-style: none;
+    /* display: flex; */
+}
+
+li.action {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    flex-direction: column;
+    padding-bottom: 5px;
+}
+
+action .type {
+    font-weight: bold;
+}
+
+span.type {
+    font-weight: bold;
+}
+
+span.time {
+    margin-left: 10px;
+    opacity: 0.6;
+    font-size: 12px;
+}
+
+span.entity {
+    margin-right: 10px;
+}
+
+span.key {
+    opacity: 0.6;
 }
