@@ -15,7 +15,7 @@
                  [alandipert/storage-atom "1.2.4"]
                  [egamble/let-else "1.0.7"]
                  [me.bsima/trello "0.3.0"]
-                 [im.chit/hara.time "2.5.2"]
+                 [clojurenote "0.4.0"]
                  [clj-time "0.13.0"]
                  [hiccup "1.0.5"]]
   :profiles {:uberjar {:aot :all}
