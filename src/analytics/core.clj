@@ -12,8 +12,8 @@
 
 
 (defn date-or-today [query-params]
-  (if (get query-params "date")
-    (time/yyyy-mm-dd->date (get query-params "date"))
+  (if-some [date (get query-params "date")]
+    (time/yyyy-mm-dd->date date)
     (clj-time/today-at 00 00)))
 
 (defroutes app
