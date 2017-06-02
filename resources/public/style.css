@@ -1,13 +1,13 @@
 @import url('./normalize.css');
 @import url('./skeleton.css');
-@import url('./daterangepicker.css');
+@import url('./datepicker.css');
 
 
 /**
  * General
 */
 * {
-    font-family: Concourse T3;
+    font-family: Concourse T3 !important;
 }
 
 body {
@@ -40,16 +40,13 @@ nav {
     justify-content: space-between;
 }
 
-#metric, #period  {
+#period  {
     height: 100%;
     border: none;
     font-size: 13px;
     letter-spacing: .1rem;
     color: #555;
     padding: 0 20px;
-}
-
-#metric:hover, #period:hover  {
 }
 
 
@@ -62,26 +59,22 @@ nav {
     border-top: 1px solid black !important;
 }
 
-#metric {
-    border-radius: 0 5px 0 0;
-}
-
 
 /**
- * Chart
+ * Selected date
  */
-#chart {
-    height: 200px;
-    background: url('./img/tiny_grid.png');
-    border-bottom: 1px solid #eee;
+#selected-date {
+    padding-top: 25px;
 }
 
+#selected-date, #actions {
+    margin: auto;
+    max-width: 600px;
+}
 
 /**
  * Actions
  */
 #actions {
     padding: 20px;
-    margin: auto;
-    max-width: 600px;
 }

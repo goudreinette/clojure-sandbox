@@ -26,14 +26,13 @@
      [:script {:src "/jquery-3.2.1.js"}]
      [:script {:src "/moment.js"}]
      [:script {:src "/knockout-3.4.2.js"}]
-     [:script {:src "/daterangepicker.js"}]]
+     [:script {:src "/datepicker.js"}]
+     [:script {:src "/datepicker.en.js"}]]
     [:body
      [:div.container
       [:nav
-       [:input#period {:data-bind "daterangepicker: dateRange"}]
-       [:select#metric [:option "Activities"] [:option "Notes"]]]
-      [:div#chart]
+       [:input#period {:value (time/yyyy-mm-dd selected-date)}]]
+      [:h1#selected-date (time/yyyy-mm-dd selected-date)]
       [:div#actions
-       [:h3#selected-date (time/yyyy-mm-dd selected-date)]
        (map source sources)]]
      [:script {:src "/main.js"}]]])

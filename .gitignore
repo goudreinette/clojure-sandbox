@@ -12,3 +12,4 @@ resources/public/img/*
 jquery*.js
 knockout*.js
 moment.js
+datepicker*.*
