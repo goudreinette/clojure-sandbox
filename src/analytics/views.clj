@@ -2,7 +2,7 @@
   (:use hiccup.core)
   (:require [analytics.time :as time]))
 
-           
+
 
 
 (defn action [{:keys [date type entities]}]
@@ -16,7 +16,7 @@
 
 
 (defn source [[name actions]]
-  [:div.source
+  [:div.source.six.columns
    [:h5 name]
    [:ul
      (map action actions)]])
@@ -36,6 +36,6 @@
       [:nav
        [:input#period {:value (time/yyyy-mm-dd selected-date) :data-startdate (time/yyyy-mm-dd selected-date)}]]
       [:h1#selected-date (time/pretty selected-date)]
-      [:div#actions
+      [:div#actions.row
        (map source sources)]]
      [:script {:src "/main.js"}]]])

@@ -21,7 +21,9 @@
     (let [date (date-or-today query-params)]
       (println query-params)
       (html (view date "from" "to"
-                  {"Trello" (trello/get-actions date)}))))
+                  {"Trello" (trello/get-actions date)
+                   "Evernote" []
+                   "Source" []}))))
   (route/resources "/"))
 
 (mount/serve (params/wrap-params app))

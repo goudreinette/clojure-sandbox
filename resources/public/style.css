@@ -69,18 +69,21 @@ nav {
     padding-top: 35px;
     font-size: 36px;
     padding-bottom: 10px;
+    padding-left: 35px;
+    padding-right: 35px;
 }
 
 #selected-date, #actions {
     margin: auto;
-    max-width: 600px;
+    /* padding: 0 20px; */
+    max-width: 750px;
 }
 
 /**
  * Actions
  */
 #actions {
-    padding: 20px;
+    padding: 20px 35px;
 }
 
 
@@ -130,4 +133,9 @@ span.key {
 
 .datepicker--cell.datepicker--cell-day.-current- {
     color: #880000 !important;
+}
+
+
+.source ul {
+    /* max-width: 360px; */
 }
