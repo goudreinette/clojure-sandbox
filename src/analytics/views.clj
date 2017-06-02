@@ -1,11 +1,11 @@
 (ns analytics.views
   (:use hiccup.core)
-  (:require [clj-time [core :as t] [format :as f]]))
+  (:require [analytics.time :as time]))
 
 
 (defn action [{:keys [date type entities]}]
   `[:tr.action
-    [:td.time ~(f/unparse (f/formatters :hour-minute) date)] ; format here
+    [:td.time ~(time/hh:mm date)]
     [:td.type ~type]
     ~@(for [[k v] entities]
        [:td.entity (str (name k) ": " v)])])
@@ -34,6 +34,6 @@
        [:select#metric [:option "Activities"] [:option "Notes"]]]
       [:div#chart]
       [:div#actions
-       [:h3#selected-date (f/unparse (f/formatters :date) selected-date)]
+       [:h3#selected-date (time/yyyy-mm-dd selected-date)]
        (map source sources)]]
      [:script {:src "/main.js"}]]])
