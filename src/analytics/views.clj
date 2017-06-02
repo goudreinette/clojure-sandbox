@@ -32,7 +32,7 @@
      [:div.container
       [:nav
        [:input#period {:value (time/yyyy-mm-dd selected-date)}]]
-      [:h1#selected-date (time/yyyy-mm-dd selected-date)]
+      [:h1#selected-date (time/pretty selected-date)]
       [:div#actions
        (map source sources)]]
      [:script {:src "/main.js"}]]])

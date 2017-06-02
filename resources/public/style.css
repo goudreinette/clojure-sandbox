@@ -64,7 +64,8 @@ nav {
  * Selected date
  */
 #selected-date {
-    padding-top: 25px;
+    padding-top: 35px;
+    padding-bottom: 10px;
 }
 
 #selected-date, #actions {

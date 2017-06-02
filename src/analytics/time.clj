@@ -22,6 +22,9 @@
 
 
 ; Presentation
+(defn pretty [date]
+  (format/unparse (format/formatter "EEEE MMMM d ") date))
+
 (defn hh:mm [date]
   (format/unparse (format/formatters :hour-minute) date))
 
