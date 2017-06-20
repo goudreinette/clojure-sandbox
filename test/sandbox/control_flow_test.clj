@@ -22,3 +22,10 @@
     :ignore-me
     (+ a b)
     [a 1 b 2]) => 3)
+
+(facts "--> threads through the underscores"
+  (--> 10 (/ _ 2)) => 5
+  (--> 10 (/ 2 _)) => 1/5
+  (--> 1 (+ 1) (* 2)) => 4
+  (--> {:key :val} (:key)) => :val
+  (--> {:key :val} :key) => :val)

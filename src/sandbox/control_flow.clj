@@ -1,8 +1,9 @@
 (ns sandbox.control-flow
   (:refer-clojure :exclude [ensure])
-  (:require [clojure.string :refer [join]]))
+  (:require [clojure.string :refer [join]]
+            [sandbox.fn :refer [pipe]]))
 
-
+; Cond
 (defn- insert-expr [expr condition]
   (if (list? condition)
     (list* (first condition) expr (rest condition))
@@ -21,13 +22,14 @@
   `(cond ~@(expand-clauses expr clauses)))
 
 
+; If
 (defmacro unless
   "Opposite of 'when'"
   [test & body]
   `(when (not ~test) ~@body))
 
 
-
+; Loop
 (defmacro do-while
   "A do-while loop"
   [test & body]
@@ -36,6 +38,7 @@
      (when-not ~test
        (recur))))
 
+; Let
 (defmacro do-let [& args]
   (let [body     (butlast args)
         bindings (last args)]
@@ -65,6 +68,7 @@
        (do ~@body))))
 
 
+; Assert
 (defmacro when-message
   "Produce a concatenation of messages whose predicate is true"
   [& pred-form-pairs]
@@ -90,7 +94,7 @@
     (apply descriptor vals)))
 
 
-
+; For
 (defmacro for-fold [bindings & body]
   (let [[[acc-sym init-expr] & coll-bindings] (partition 2 bindings)
         el-syms    (map first coll-bindings)
@@ -104,3 +108,40 @@
   `(apply merge
     (for [~@bindings]
         ~@body)))
+
+
+; Trace
+(defn trace [x]
+  (println x)
+  x)
+
+
+; Threading
+(defn underscore? [x]
+  (= x '_))
+
+
+(defn contains-underscore? [form]
+  (if (list? form)
+    (some contains-underscore? form)
+    (underscore? form)))
+
+
+(defn to-fn [form]
+  (eval
+    (cond
+      (contains-underscore? form)
+      `(fn [~'_] ~form)
+
+      (list? form)
+      `(fn [_#] (~(first form) _# ~@(rest form)))
+
+      :else
+       form)))
+
+
+(defmacro --> [expr & forms]
+  ((->> forms
+    (map to-fn)
+    (reverse)
+    (reduce comp)) expr))
